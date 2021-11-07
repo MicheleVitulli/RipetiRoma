@@ -1,4 +1,8 @@
 class Subject < ApplicationRecord
-  has_and_belongs_to_many :teachers
+  has_many :teaches
+  has_many :users, through: :teaches
+
+  has_many:course
+
   resourcify
 end

@@ -14,6 +14,7 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @users = User.all
   end
 
   # GET /courses/1/edit
@@ -65,6 +66,7 @@ class CoursesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.fetch(:course, {})
+      p = params.require(:course).permit(:teacher, :student)
+      {:teacher => current_user}
     end
 end

@@ -1,11 +1,32 @@
 
 
-<% @users.each do |teacher| %>
+<% @users.each do |utente| %>
+ <% if current_user.has_role? :admin or current_user == utente %> 
   <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title"><%= teacher.email %></h5>
-      <a><%= link_to 'Destroy', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure?' } %></a>
-      
+      <h5 class="card-title"><%= utente.email %></h5>
+      <p>
+              <% if utente.has_role? :teacher %>
+                  <p>Sei un insegnante</p>
+                  <h6>Insegni queste materie</h6>
+                  <ul>
+                  <% utente.subjects.each do |materia| %>
+                    <li> <%= materia.name %></li>
+                  <%end%>
+                  </ul>
+                  <h6>Hai questi studenti</h6>
+                  <ul>
+                  <% utente.students.each do |studente| %>
+                    <li> <%= studente.email %></li>
+                  <%end%>
+                  </ul>
+              <% elsif utente.has_role? :student %>
+                  <p>Sei uno studente</p>
+              <% end %>
+      </p>
+
+      <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
+      <% end %>
     </div>
   </div>
   <% end %>

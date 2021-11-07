@@ -1,5 +1,13 @@
 <h1>New Course</h1>
 
-<%= render 'form', course: @course %>
-
+<% @users.each do |utente| %>
+  <% if current_user.has_role? :teacher and utente.has_role? :student%>
+    <ul>
+      <p><%= utente.email %></p>
+      <p><%= utente.id %></p>
+      <%= link_to 'Inizia un corso', fa_corso_user_path(utente.id)%>
+      
+    </ul>
+  <% end %>
+<% end %>
 <%= link_to 'Back', courses_path %>

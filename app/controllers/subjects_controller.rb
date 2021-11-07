@@ -2,6 +2,13 @@ class SubjectsController < ApplicationController
   before_action :set_subject, only: %i[ show edit update destroy ]
   load_and_authorize_resource
 
+
+  def aggiungi_materia
+    @corso = Course.find(params[:id])
+    @materia = Subject.find(params[:id])
+    @subject.courses<<@corso
+  end
+
   # GET /subjects or /subjects.json
   def index
     @subjects = Subject.all

@@ -11,10 +11,14 @@
 
   <tbody>
     <% @courses.each do |course| %>
+
       <tr>
+        <td><h5><%=current_user.email%> Insegna a</h5></td>
+        <td><h5><%=course.student.email%></h5></td>
         <td><%= link_to 'Show', course %></td>
         <td><%= link_to 'Edit', edit_course_path(course) %></td>
         <td><%= link_to 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Aggiungi materia',  %></td>
       </tr>
     <% end %>
   </tbody>

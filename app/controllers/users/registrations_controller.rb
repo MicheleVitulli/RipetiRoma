@@ -13,9 +13,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+      if current_user.has_role(:teacher)
+        current_user.create_teacher(f_name: "",l_name: "",email: self.email, phone: "")
+      elsif current_user.has_role(:student)
+        current_user.create_student(f_name: "",l_name: "",email: self.email, phone: "")
+      end
+
+   end
 
   # GET /resource/edit
   # def edit
@@ -49,8 +55,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_account_update_params
-  #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
+   #def configure_account_update_params
+    #   devise_parameter_sanitizer.permit(:account_update, keys: [:ruolo])
   # end
 
   # The path used after sign up.

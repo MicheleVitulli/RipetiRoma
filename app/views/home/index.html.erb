@@ -1,8 +1,7 @@
 <h1>Controllo risorse del Sito</h1>
 
 
-<p><%= link_to "vedi tutti gli insegnanti", "/teachers"%></p>
-<p><%= link_to "vedi tutti gli studenti", "/students"%></p>
+
 <p><%= link_to "vedi tutte le materie", "/subjects"%></p>
 <p><%= link_to "vedi tutte le users", "/users/index"%></p>
 <p><%= link_to "vedi tutti i corsi", "/courses"%></p>
@@ -13,8 +12,10 @@
 <% if user_signed_in?%>
 <% if current_user.has_role? :admin %>
   <p>Tu sei un admin</p>
-<% elsif current_user.has_role? :guest %>
- <p>Tu sei un guest</p>
+<% elsif current_user.has_role? :teacher %>
+ <p>Tu sei un teacher</p>
+ <% elsif current_user.has_role? :student %>
+  <p>Tu sei uno student</p>
 <% else %>
   <p>tu sei nulla</p>
 <% end %>
