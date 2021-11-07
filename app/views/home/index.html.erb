@@ -1,0 +1,20 @@
+<h1>Controllo risorse</h1>
+
+
+<p><%= link_to "vedi tutti gli insegnanti", "/teachers"%></p>
+<p><%= link_to "vedi tutti gli studenti", "/students"%></p>
+<p><%= link_to "vedi tutte le materie", "/subjects"%></p>
+<p><%= link_to "vedi tutte le users", "/users/index"%></p>
+
+
+<% if user_signed_in?%>
+<% if current_user.has_role? :admin %>
+  <p>Tu sei un admin</p>
+<% elsif current_user.has_role? :guest %>
+ <p>Tu sei un guest</p>
+<% else %>
+  <p>tu sei nulla</p>
+<% end %>
+<% else %>
+<p>non sei entrato</p>
+<% end %>

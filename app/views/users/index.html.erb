@@ -1,0 +1,11 @@
+
+
+<% @users.each do |teacher| %>
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"><%= teacher.email %></h5>
+      <a><%= link_to 'Destroy', destroy_user_session_path, method: :delete, data: { confirm: 'Are you sure?' } %></a>
+      
+    </div>
+  </div>
+  <% end %>

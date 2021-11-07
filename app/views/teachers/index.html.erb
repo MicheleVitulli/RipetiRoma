@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Insegnanti</h1>
+
+<div class="container">
+
+  <% @teachers.each do |teacher| %>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title"><%= teacher.f_name %></h5>
+        <h6 class="card-subtitle mb-2 text-muted"><%= teacher.l_name %></h6>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a><%= link_to 'Show', teacher %></a>
+        <a><%= link_to 'Edit', edit_teacher_path(teacher) %></a>
+        <a><%= link_to 'Destroy', teacher, method: :delete, data: { confirm: 'Are you sure?' } %></a>
+      </div>
+    </div>
+    <% end %>
+  </div>
+
+
+
+  <br>
+
+  <%= link_to 'New Teacher', new_teacher_path %>
