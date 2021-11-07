@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :teaches
   resources :courses
   get 'users/index'
   resources :students

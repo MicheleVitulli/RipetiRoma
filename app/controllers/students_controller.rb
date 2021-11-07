@@ -1,5 +1,6 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
 
   # GET /students or /students.json
   def index

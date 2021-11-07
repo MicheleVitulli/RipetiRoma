@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_07_013010) do
+ActiveRecord::Schema.define(version: 2021_11_07_022035) do
 
   create_table "courses", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
@@ -45,8 +45,6 @@ ActiveRecord::Schema.define(version: 2021_11_07_013010) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "teacher_id", null: false
-    t.index ["teacher_id"], name: "index_subjects_on_teacher_id"
   end
 
   create_table "teachers", force: :cascade do |t|
@@ -56,6 +54,15 @@ ActiveRecord::Schema.define(version: 2021_11_07_013010) do
     t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "teaches", force: :cascade do |t|
+    t.integer "teacher_id", null: false
+    t.integer "subject_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subject_id"], name: "index_teaches_on_subject_id"
+    t.index ["teacher_id"], name: "index_teaches_on_teacher_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -81,5 +88,6 @@ ActiveRecord::Schema.define(version: 2021_11_07_013010) do
 
   add_foreign_key "courses", "students"
   add_foreign_key "courses", "teachers"
-  add_foreign_key "subjects", "teachers"
+  add_foreign_key "teaches", "subjects"
+  add_foreign_key "teaches", "teachers"
 end
