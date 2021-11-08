@@ -4,9 +4,14 @@ class SubjectsController < ApplicationController
 
 
   def aggiungi_materia
+    #render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
-    @materia = Subject.find(params[:id])
-    @subject.courses<<@corso
+    @materia = Subject.find(params[:materia_id])
+    @corso.subject = @materia
+    if @corso.save
+
+    redirect_to '/courses'
+    end
   end
 
   # GET /subjects or /subjects.json
@@ -72,6 +77,6 @@ class SubjectsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def subject_params
-      params.require(:subject).permit(:name)
+      params.require(:subject).permit(:name, :course_id, :subject_id)
     end
 end

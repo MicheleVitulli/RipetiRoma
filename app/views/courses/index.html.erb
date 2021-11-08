@@ -13,12 +13,22 @@
     <% @courses.each do |course| %>
 
       <tr>
-        <td><h5><%=current_user.email%> Insegna a</h5></td>
+        <td><h5><%=current_user.email%> insegna a</h5></td>
         <td><h5><%=course.student.email%></h5></td>
+        <% if course.subject!= nil %>
+          <td><h5><%=course.subject.name%></h5></td>
+
+        <% else %>
+        <td><ul><% @subjects.each do |materia| %>
+          <li><%= materia.name %></li>
+          <li><%= link_to 'Aggiungi materia', aggiungi_materia_subject_path(course.id, materia.id) %></li>
+
+
+        <% end %></ul></td>
+        <% end %>
         <td><%= link_to 'Show', course %></td>
         <td><%= link_to 'Edit', edit_course_path(course) %></td>
         <td><%= link_to 'Destroy', course, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td><%= link_to 'Aggiungi materia',  %></td>
       </tr>
     <% end %>
   </tbody>

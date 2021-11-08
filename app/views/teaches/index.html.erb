@@ -14,8 +14,8 @@
   <tbody>
     <% @teaches.each do |teach| %>
       <tr>
-        <td><%= teach.teacher_id %></td>
-        <td><%= teach.subject_id %></td>
+        <td><%= @teachers.find(teach.user_id).email %></td>
+        <td><%= @subjects.find(teach.subject_id).name %></td>
         <td><%= link_to 'Show', teach %></td>
         <td><%= link_to 'Edit', edit_teach_path(teach) %></td>
         <td><%= link_to 'Destroy', teach, method: :delete, data: { confirm: 'Are you sure?' } %></td>

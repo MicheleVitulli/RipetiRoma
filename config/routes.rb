@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :subjects
   get 'subjects/:id/insegna' => 'users#insegna_materia', :via => :get, :as => :insegna_materia_user
   get 'subjects/:id/ninsegna' => 'users#noninsegna_materia', :via => :get, :as => :noninsegna_materia_user
+  get 'courses/amateria/:id.:materia_id' => 'subjects#aggiungi_materia', :via => :get, :as => :aggiungi_materia_subject
   get 'courses/new/corso/:id' => 'users#fa_corso', :via => :get, :as => :fa_corso_user
   get 'courses/new/ncorso/:id' => 'users#nonfa_corso', :via => :get, :as => :nonfa_corso_user
 devise_for :users

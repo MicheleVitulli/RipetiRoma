@@ -1,9 +1,11 @@
 class TeachesController < ApplicationController
   before_action :set_teach, only: %i[ show edit update destroy ]
-
+  load_and_authorize_resource
   # GET /teaches or /teaches.json
   def index
     @teaches = Teach.all
+    @teachers = User.all
+    @subjects = Subject.all
   end
 
   # GET /teaches/1 or /teaches/1.json

@@ -8,6 +8,7 @@ class Ability
     elsif user.has_role? :teacher
       can :read, :all
       can :manage, Course
+      can :aggiungi_materia, Subject
     else
         can :read, :all
     end
