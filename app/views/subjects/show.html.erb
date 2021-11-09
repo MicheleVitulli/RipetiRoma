@@ -4,14 +4,23 @@
   <strong>Name:</strong>
   <%= @subject.name %>
 </p>
+<% @users.each do |insegnante| %>
+  <% if insegnante.has_role? :teacher%>
+    <% if insegnante.subjects.include? @subject%>
+    <h3><%= link_to insegnante.email, user_path(insegnante) %></h3>
+    <% end %>
+  <% end %>
+<% end %>
 
-<%= link_to 'Edit', edit_subject_path(@subject) %> |
-<% if current_user.has_role? :teacher %>
+
+
+
+<% if user_signed_in? and current_user.has_role? :teacher %>
   <% if current_user.subjects.exists?(name: @subject.name) %>
     <%= link_to 'Smetti di Insegnare', noninsegna_materia_user_path%>
   <% else %>
-  <%= link_to 'Insegna', insegna_materia_user_path(@subject.id)%>
+  <%= link_to 'Inizia ad insegnare', insegna_materia_user_path(@subject.id)%>
   <% end %>
 <% end %>
-<%= link_to 'Users', user_view_path%>
-<%= link_to 'Back', subjects_path %>
+<br>
+<%= link_to 'Torna indietro', subjects_path %>

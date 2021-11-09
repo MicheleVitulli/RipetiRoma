@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :subjects, through: :teaches
 
   has_many :courses
+ 
 
   has_many :students,
     class_name: 'Course',
@@ -21,7 +22,18 @@ class User < ActiveRecord::Base
     class_name: 'Course',
     foreign_key: :teacher_id
 
-    has_many :students, through: :teachers
+  has_many :students, through: :teachers
+
+
+#######
+  has_many :reviews
+  
+  has_many :reviewed,
+    class_name: 'Review',
+    foreign_key: :reviewer_id
+
+
+
 
 
 
@@ -41,5 +53,4 @@ class User < ActiveRecord::Base
         self.add_role(:student)
     end
   end
-
 end

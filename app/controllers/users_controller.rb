@@ -2,6 +2,10 @@ class UsersController < ApplicationController
   def index
     @users = User.all
   end
+  
+  def show
+  @user = User.find_by_id(params[:id])
+  end
 
   def insegna_materia
     @materia = Subject.find(params[:id])
@@ -18,7 +22,7 @@ class UsersController < ApplicationController
   end
 
   def fa_corso
-  
+
     @student = User.find(params[:id])
     current_user.students<<@student
     #@teach = Teach.new(user_id: current_user.id, subject_id: @materia.id )
@@ -35,6 +39,6 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    redirect_to :user_view
+    redirect_to '/'
   end
 end

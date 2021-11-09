@@ -5,7 +5,11 @@
 <p><%= link_to "vedi tutte le materie", "/subjects"%></p>
 <p><%= link_to "vedi tutte le users", "/users/index"%></p>
 <p><%= link_to "vedi tutti i corsi", "/courses"%></p>
+<% if user_signed_in?%>
+  <% if current_user.has_role? :admin %>
 <p><%= link_to "vedi tutti i insegnamenti", "/teaches"%></p>
+  <% end %>
+<% end %>
 
 
 

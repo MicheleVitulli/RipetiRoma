@@ -7,10 +7,20 @@ class Ability
       can :manage, :all
     elsif user.has_role? :teacher
       can :read, :all
-      can :manage, Course
+      can :manage, Course, teacher_id: user.id
+      can :manage, Teach, teacher_id: user.id
+      can :read, Review
       can :aggiungi_materia, Subject
-    else
+      can [:edit, :destroy], User, user: user
+    elsif user.has_role? :student
         can :read, :all
+        can :manage, Review, reviewer_id: user.id
+        can [:edit, :destroy], User, user: user
+    else
+        can :read, Subject
+        can [:read, :create], User
+        can :read, Review
+
     end
   end
 end

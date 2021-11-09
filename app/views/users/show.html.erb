@@ -1,0 +1,57 @@
+<h1><%= @user.email %></h1>
+<% if current_user.has_role? :admin%>
+  <h1>Admin</h1>
+<% else %>
+  <h1><%= @user.ruolo %></h1>
+<% end %>
+<% if @user.has_role? :teacher%>
+  <h1>Recensioni</h1>
+      <div class="row">
+        <% @user.reviews.each do |rec| %>
+          <div class="col-md-6 col-lg-4"> 
+            <p>
+              <%= rec.testo %>
+            </p>
+            <p>Voto:<%= rec.valutazione %></p>
+            <% if current_user.has_role? :admin or current_user.id == rec.reviewer_id %>
+              <p>
+                  <% if current_user.has_role? :admin or current_user = @user%>
+                    <%= link_to 'Elimina recensione' , [rec.user, rec], method: :delete, data: { confirm: "Sei sicuro?"
+                      }, class: "text-danger" %>
+                  <% end %>
+              </p>   
+          <% end %>
+      </div>
+    </div>
+
+<% end %>
+
+<footer class="container mb-4">
+    <% if not current_user.has_role? :admin and not current_user.has_role? :teacher %>
+      <h3>Scrivi una recensione</h3>
+      <%= form_with model: [ @user, @user.reviews.build] do |form| %>
+        <div class="form-group">
+          <%= form.label :testo %><br>
+            <%= form.text_area :testo, class: 'form-control' , rows: '1' %>
+        </div>
+        <div class="form-row">
+          <div class="col">
+            <%= form.label :valutazione %><br>
+              <%= form.select :valutazione, [1,2,3,4,5] %>
+          </div>
+        </div>
+        <div class="form-row">
+          <p></p>
+        </div>
+
+
+        <div class="form-group">
+          <%= form.submit "Pubblica recensione" , class: "btn btn-primary" %>
+        </div>
+        <% end %>
+          <% end %>
+
+            <%= link_to "Torna a tutti gli insegnanti" , users_path %>
+  </footer>
+
+  <% end %>

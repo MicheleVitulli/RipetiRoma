@@ -1,7 +1,42 @@
 
-
+<% if not user_signed_in? %>
+  <h5>Questi sono i nostri insegnanti</h5>
+<% end %>
 <% @users.each do |utente| %>
- <% if current_user.has_role? :admin or current_user == utente %> 
+<% if not user_signed_in? %>
+  <% if utente.has_role? :teacher %>
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"><%= utente.email %></h5>
+    </div>
+  </div>
+  <% end %>
+
+
+<% else %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <% if current_user.has_role? :admin or current_user.has_role? :student or current_user == utente %>
   <div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title"><%= utente.email %></h5>
@@ -16,8 +51,12 @@
                   </ul>
                   <h6>Hai questi studenti</h6>
                   <ul>
+                    <% unici = [] %>
                   <% utente.students.each do |studente| %>
+                    <% if not unici.include? studente%>
+                      <% unici.push(studente)%>
                     <li> <%= studente.email %></li>
+                    <% end %>
                   <%end%>
                   </ul>
               <% elsif utente.has_role? :student %>
@@ -25,8 +64,32 @@
               <% end %>
       </p>
 
+
+      <% if current_user.has_role? :admin or current_user == utente%>
       <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
+      <% end %>
+
+
+      <% if current_user.has_role? :teacher%>
+        <% if current_user == utente %>
+        <a><%= link_to "Vedi le tue recensioni", utente%></a>
+        <% end %>
+
+      <% elsif current_user.has_role? :student %>
+        <% if utente.has_role? :teacher%>
+        <a><%= link_to "Lascia una recensione", utente%></a>
+        <% end %>
+
+      <% else %>
+
+        <a><%= link_to "Ispeziona", utente%></a>
+      <% end %>
+
+
+
+
       <% end %>
     </div>
   </div>
+  <% end %>
   <% end %>
