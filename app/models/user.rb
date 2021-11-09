@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :subjects, through: :teaches
 
   has_many :courses
- 
+
 
   has_many :students,
     class_name: 'Course',
@@ -27,10 +27,16 @@ class User < ActiveRecord::Base
 
 #######
   has_many :reviews
-  
+
   has_many :reviewed,
     class_name: 'Review',
     foreign_key: :reviewer_id
+######
+has_many :messages
+
+has_many :messaged,
+  class_name: 'Message',
+  foreign_key: :messanger_id
 
 
 

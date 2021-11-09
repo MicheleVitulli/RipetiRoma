@@ -1,95 +1,74 @@
-
 <% if not user_signed_in? %>
   <h5>Questi sono i nostri insegnanti</h5>
 <% end %>
 <% @users.each do |utente| %>
-<% if not user_signed_in? %>
-  <% if utente.has_role? :teacher %>
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= utente.email %></h5>
-    </div>
-  </div>
-  <% end %>
+  <% if not user_signed_in? %>
+    <% if utente.has_role? :teacher %>
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title"><%= utente.email %></h5>
+          <a><%= link_to "Vedi recensioni", utente%></a>
+        </div>
+      </div>
+    <% end %>
 
+  <% else %>
 
-<% else %>
+    <% if current_user.has_role? :admin or current_user.has_role? :student or current_user.has_role? :teacher %>
+      <% if utente.has_role? :teacher %>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"><%= utente.email %></h5>
+            <p>
 
+              <p>Insegnante</p>
 
+              <% if current_user == utente and current_user.has_role? :teacher%>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <% if current_user.has_role? :admin or current_user.has_role? :student or current_user == utente %>
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= utente.email %></h5>
-      <p>
-              <% if utente.has_role? :teacher %>
-                  <p>Sei un insegnante</p>
-                  <h6>Insegni queste materie</h6>
-                  <ul>
-                  <% utente.subjects.each do |materia| %>
-                    <li> <%= materia.name %></li>
-                  <%end%>
-                  </ul>
-                  <h6>Hai questi studenti</h6>
-                  <ul>
-                    <% unici = [] %>
-                  <% utente.students.each do |studente| %>
-                    <% if not unici.include? studente%>
-                      <% unici.push(studente)%>
-                    <li> <%= studente.email %></li>
-                    <% end %>
-                  <%end%>
-                  </ul>
-              <% elsif utente.has_role? :student %>
-                  <p>Sei uno studente</p>
+                <a><%= link_to "Vedi il tuo profilo", utente%></a>
+              <% else %>
+                <a><%= link_to "Vedi recensioni", utente%></a>
               <% end %>
-      </p>
 
+              <% if current_user.has_role? :admin %>
+                <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
+                <h6>Ha questi studenti</h6>
+                <ul>
+                  <% unici = [] %>
+                    <% utente.students.each do |studente| %>
+                      <% if not unici.include? studente%>
+                        <% unici.push(studente)%>
+                          <li>
+                            <%= studente.email %></li>
 
-      <% if current_user.has_role? :admin or current_user == utente%>
-      <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
-      <% end %>
+                        <% end %>
+                      <%end%>
+                    <% end %>
 
+                    <h6>Insegna queste materie</h6>
+                    <ul>
+                      <% utente.subjects.each do |materia| %>
+                        <li>
+                          <%= materia.name %></li>
+                      <%end%>
+                    </ul>
 
-      <% if current_user.has_role? :teacher%>
-        <% if current_user == utente %>
-        <a><%= link_to "Vedi le tue recensioni", utente%></a>
-        <% end %>
+                </ul>
+                <% elsif current_user.has_role? :admin%>
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= utente.email %></h5>
+                      <p>
+                        <p>Studente</p>
+                        <% if current_user.has_role? :admin %>
+                          <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
+                        <% end %>
+                        <a><%= link_to "Ispeziona", utente%></a>
+                      <% end %>
+                    </p>
 
-      <% elsif current_user.has_role? :student %>
-        <% if utente.has_role? :teacher%>
-        <a><%= link_to "Lascia una recensione", utente%></a>
-        <% end %>
-
-      <% else %>
-
-        <a><%= link_to "Ispeziona", utente%></a>
-      <% end %>
-
-
-
-
-      <% end %>
-    </div>
-  </div>
-  <% end %>
-  <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
