@@ -1,25 +1,24 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
+<h3>
   <%= @subject.name %>
-</p>
-<% @users.each do |insegnante| %>
-  <% if insegnante.has_role? :teacher%>
-    <% if insegnante.subjects.include? @subject%>
-    <h3><%= link_to insegnante.email, user_path(insegnante) %></h3>
+</h3>
+<ul>
+  Insegnata da
+  <% @users.each do |insegnante| %>
+    <% if insegnante.has_role? :teacher%>
+      <% if insegnante.subjects.include? @subject%>
+        <li><%= link_to insegnante.email, user_path(insegnante) %></li>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
-
-
-
+</ul>
 
 <% if user_signed_in? and current_user.has_role? :teacher %>
   <% if current_user.subjects.exists?(name: @subject.name) %>
-    <%= link_to 'Smetti di Insegnare', noninsegna_materia_user_path%>
+    <h5><%= link_to 'Smetti di Insegnare', noninsegna_materia_user_path%></h5>
   <% else %>
-  <%= link_to 'Inizia ad insegnare', insegna_materia_user_path(@subject.id)%>
+    <h5><%= link_to 'Inizia ad insegnare', insegna_materia_user_path(@subject.id)%></h5>
   <% end %>
 <% end %>
 <br>

@@ -7,6 +7,15 @@
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title"><%= utente.email %></h5>
+          <h6>
+            Insegna</h6>
+          <% utente.subjects.each do |materia| %>
+            <ul>
+              <li>
+                <%= materia.name%>
+              </li>
+            </ul>
+          <% end %>
           <a><%= link_to "Vedi recensioni", utente%></a>
         </div>
       </div>

@@ -14,16 +14,20 @@
     <% @subjects.each do |subject| %>
       <tr>
         <td><%= subject.name %></td>
-        <td><%= link_to 'Vedi chi la insegna', subject %></td>
-        <% if user_signed_in? and current_user.has_role? :admin%>
-          <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        <% if not user_signed_in? or current_user.has_role? :student %>
+          <td><%= link_to 'Vedi chi la insegna', subject %></td>
+          <% elsif current_user.has_role? :teacher%>
+            <td><%= link_to 'Vedi chi la insegna/ inizia ad insegnare', subject %></td>
+          <% end %>
+          <% if user_signed_in? and current_user.has_role? :admin%>
+            <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<br>
-<% if user_signed_in? and  current_user.has_role? :admin%>
-  <%= link_to 'New Subject', new_subject_path %>
-<% end %>
+  <br>
+  <% if user_signed_in? and  current_user.has_role? :admin%>
+    <%= link_to 'New Subject', new_subject_path %>
+  <% end %>
