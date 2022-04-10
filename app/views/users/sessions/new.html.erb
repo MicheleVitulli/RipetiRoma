@@ -1,26 +1,41 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+</p><section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class=" col-md-6 col-xl-5 p-3 d-none d-md-block ">
+        <%= image_tag("classroom.png", class: "img-fluid") %>
+      </div>
+      <div class=" col-md-6 col-xl-4 offset-xl-1">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-center">
+            <p class="lead fw-normal mb-0 me-3">Entra con </p>
+            <button type="button" class="btn  btn-floating mx-1">
+              <%=link_to "",user_google_oauth2_omniauth_authorize_path, class: 'bi bi-google', method: :post%>
+            </button>
+            <button type="button" class="btn  btn-floating mx-1">
+              <%=link_to "",user_facebook_omniauth_authorize_path, class: 'bi bi-facebook', method: :post%>
+            </button>
+            
+          </div>
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0">O</p>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control form-control-lg", placeholder: "Email" %>
+          </div>
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+            <%= f.password_field :password, autocomplete: "current-password", placeholder: "Password", class: "form-control form-control-lg"  %>
+          </div>
+          <div class="d-flex justify-content-end align-items-center">
+            <!-- Checkbox -->
+          </div>
+          <div class="text-center text-lg-center mt-0 pt-2">
+            <%= f.submit "Entra", class: "btn darkG  btn-lg", style: "padding-left: 2.5rem; padding-right: 2.5rem;"%>
+            <p class="small fw-bold mt-2 pt-1 mb-0"><%= render "users/shared/links" %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+  </section>

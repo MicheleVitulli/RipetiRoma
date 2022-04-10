@@ -1,1 +1,1 @@
-json.array! @teaches, partial: "teaches/teach", as: :teach
+json.array! @teaches, partial: 'teaches/teach', as: :teach

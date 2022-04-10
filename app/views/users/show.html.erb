@@ -1,111 +1,289 @@
-<% if not user_signed_in?%>
-
-  <h1>Recensioni per
-    <%= @user.email%></h1>
-  <div class="row">
-    <% @user.reviews.each do |rec| %>
-      <div class="col-md-6 col-lg-4">
-        <p>
-          <%= rec.testo %>
-        </p>
-        <p>
-          Recensione fatta da:
-          <%= rec.reviewer.email %>
-        </p>
-        <p>Voto:<%= rec.valutazione %></p>
-      <% end %>
+<% if @user.has_role? :teacher %>
+  <div class="px-4 pt-3 pb-2 mt-2 mb-0 text-center">
+    <h1 class="display-5 fw-bold"><%= @user.nome%></h1>
+    <% if @user.avatar.attached? %>
+      <%= image_tag(@user.avatar_thumbnail, class: "img-fluid bg-dark rounded-start p-2 mb-2") %>
     <% else %>
-
-      <h1><%= @user.email %></h1>
-      <% if current_user.has_role? :admin%>
-        <h1>Admin</h1>
-      <% else %>
-        <h5>Sei uno
-          <%= @user.ruolo %></h5>
-      <% end %>
-      <% if @user.has_role? :teacher%>
-        <h1>Recensioni
-        </h1>
-        <div class="row">
-          <% @user.reviews.each do |rec| %>
-            <div class="col-md-6 col-lg-4">
-              <p>
-                <%= rec.testo %>
-              </p>
-              <p>
-                Recensione fatta da:
-                <%= rec.reviewer.email %>
-              </p>
-              <p>Voto:<%= rec.valutazione %></p>
-              <% if current_user.has_role? :admin or current_user.id == rec.reviewer_id %>
-                <p>
-                  <%= link_to 'Elimina recensione' , [rec.user, rec], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
-                <% end %>
-              </p>
-            <% end %>
+      <%= image_tag("user.png", class: "img-fluid bg-dark rounded-start p-2 mb-2", height: 120, width: 120) %>
+    <% end %>
+    <div class="col-lg-6 mx-auto mb-0">
+      <p class="lead mb-0 mt-2"><%= @user.descrizione if @user.descrizione %></p>
+      <p class="mt-2">
+        <button class="h6 mt-2 btn bg-light border-dark" type="" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Cosa insegno?
+        </button>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <ul class="list-group pt-2 mx-5">
+              <% @user.subjects.each do |materia| %>
+                <li class="list-group-item pt-2">  <%=link_to materia.name, materia %> </li>
+              <% end %>
+            </ul>
           </div>
         </div>
-      <% end %>
-
-      <div class="container mb-4">
-        <% if current_user.has_role? :student and @user.has_role? :teacher%>
-          <h3>Scrivi una recensione</h3>
-          <%= form_with model: [ @user, @user.reviews.build] do |form| %>
-          <div class="form-group">
-            <%= form.label :testo %><br>
-            <%= form.text_area :testo, class: 'form-control' , rows: '1' %>
-          </div>
-          <div class="form-row">
-            <div class="col">
-              <%= form.label :valutazione %><br>
-              <%= form.select :valutazione, [1,2,3,4,5] %>
+      </p>
+    </div>
+  </div>
+  <div id="carouselExampleDark" class="carousel carousel-dark slide py-0 my-0" data-bs-ride="carousel">
+    <div class="carousel-inner py-0">
+      <% i = 0 %>
+      <% if @user.reviews.empty? %>
+        <div class="carousel-item active" data-bs-interval="8000">
+          <div class="container col-xxl-8 px-4 pt-1 pb-1">
+            <div class="row flex-lg-row align-items-center g-5 py-5">
+              <div class="col-lg-6">
+                <h1 class="display-6 fw-bold lh-1 mb-1">Nessuna recensione</h1>
+                <p class="lead"> Effettua l'accesso o registrati come studente per essere il primo a recensire questo insegnante.</p>
+              </div>
+              <div class="col-10 col-sm-8 col-lg-6">
+                <img src=<%= asset_path('0.png')%> class="img-fluid rounded-start p-2" >
+              </div>
             </div>
           </div>
-          <div class="form-row">
-            <p></p>
-          </div>
-
-          <div class="form-group">
-            <%= form.submit "Pubblica recensione" , class: "btn btn-primary" %>
-          </div>
+        </div>
+      <% else %>
+        <% @user.reviews.each do |rec| %>
+          <% if i == 0 %>
+            <div class="carousel-item active" data-bs-interval="8000">
+              <div class="container col-xxl-8 px-4 pt-1 pb-5">
+                <div class="row flex-lg-row align-items-center g-5 py-5">
+                  <div class="col-lg-6">
+                    <h1 class="display-6 fw-bold lh-1 mb-3"><%= rec.testo %></h1>
+                    <p class="lead">Recensione di <%= rec.reviewer.email %></p>
+                    <div class="carousel-caption d-none d-md-block pt-3">
+                      <% if user_signed_in? and (current_user.has_role? :admin or current_user.id == rec.reviewer_id) %>
+                        <p>
+                          <%= link_to 'Elimina recensione' , [rec.user, rec], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
+                        </p>
+                      <% else %>
+                        <% if user_signed_in? and current_user.has_role? :student%>
+                          <h5>Lascia una recensione anche tu</h5>
+                          <a href='#lasciaRecensione'>
+                            <p>Clicca qui.</p>
+                          </a>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="col-10 col-sm-8 col-lg-6">
+                    <% if rec.valutazione==1 %>
+                      <img src=<%= asset_path('1.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==2 %>
+                      <img src=<%= asset_path('2.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==3 %>
+                      <img src=<%= asset_path('3.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==4 %>
+                      <img src=<%= asset_path('4.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==5 %>
+                      <img src=<%= asset_path('5.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% i=i+1 %>
+          <% else %>
+            <div class="carousel-item" data-bs-interval="8000">
+              <div class="container col-xxl-8 px-4 pt-1 pb-5">
+                <div class="row flex-lg-row align-items-center g-5 py-5">
+                  <div class="col-lg-6">
+                    <h1 class="display-6 fw-bold lh-1 mb-3"><%= rec.testo %></h1>
+                    <p class="lead">Recensione di <%= rec.reviewer.email %></p>
+                    <div class="carousel-caption d-none d-md-block pt-3">
+                      <% if user_signed_in? and (current_user.has_role? :admin or current_user.id == rec.reviewer_id) %>
+                        <p>
+                          <%= link_to 'Elimina recensione' , [rec.user, rec], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
+                        </p>
+                      <% else %>
+                        <% if user_signed_in? and current_user.has_role? :student%>
+                          <h5>Lascia una recensione anche tu</h5>
+                          <a href='#lasciaRecensione'>
+                            <p>Clicca qui.</p>
+                          </a>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="col-10 col-sm-8 col-lg-6">
+                    <% if rec.valutazione==1 %>
+                      <img src=<%= asset_path('1.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==2 %>
+                      <img src=<%= asset_path('2.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==3 %>
+                      <img src=<%= asset_path('3.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==4 %>
+                      <img src=<%= asset_path('4.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                    <% if rec.valutazione==5 %>
+                      <img src=<%= asset_path('5.png')%> class="img-fluid rounded-start p-2" >
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
         <% end %>
-        <%= link_to "Torna a tutti gli insegnanti" , users_path %>
       <% end %>
     </div>
-
-    <% if not current_user.has_role? :admin  %>
-      <h3>Manda un messaggio</h3>
-      <%= form_with model: [ @user, @user.messages.build] do |form| %>
-      <div class="form-group">
-        <%= form.label :testo %><br>
-        <%= form.text_area :testo, class: 'form-control' , rows: '1' %>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="row row-cols-md-2 row-cols-sm-1 justify-content-center">
+    <% if user_signed_in? and current_user.has_role? :student and current_user != @user%>
+      <div class="col " id="lasciaRecensione">
+        <%= form_with model: [ @user, @user.reviews.build] do |form| %>
+          <h4 class="text-center pt-3 fw-bold"> Scrivi la tua recensione </h4>
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <div class="form-group mx-5">
+              <%= form.label :testo, class: 'd-none'%><br>
+              <%= form.text_area :testo, class: 'form-control' , rows: '2 ' %>
+            </div>
+          </div>
+          <!-- Email input -->
+          <div class="row">
+            <div class="col-7 mr-3 mb-2">
+              <div class="form-outline mb-4 mx-5 text-center">
+                <%= form.label :valutazione , class: 'text-success pb-0 mb-0 d-none'%><br>
+                <%= form.select :valutazione, options_for_select([
+  ["Numero di stelle", ""], 
+  1, 
+  2, 
+  3, 
+  4, 
+  5]), 
+  {}, { class: "form-select pt-2 mt-0" } %>
+              </div>
+            </div>
+            <div class="col-4 mx-2 text-center">
+              <%= form.submit "Pubblica recensione" , class: "btn darkG mt-3" %>
+            </div>
+            <!-- Checkbox -->
+            <!-- Submit button -->
+          <% end %>
+        </div>
       </div>
-      <div class="form-row">
-        <p></p>
+    <% end %>
+    <% if user_signed_in? and (current_user.has_role? :student or current_user.has_role? :teacher or current_user.has_role? :admin) and current_user != @user%>
+      <div class="col" id="lasciaMessaggio">
+        <%= form_with model: [ @user, @user.messages.build] do |form| %>
+          <h4 class="text-center pt-3 fw-bold"> Manda un messaggio </h4>
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <div class="form-group mx-5">
+              <%= form.label :testo, class: 'd-none'%><br>
+              <%= form.text_area :testo, class: 'form-control' , rows: '2 ' %>
+            </div>
+          </div>
+          <!-- Email input -->
+          <div class="row justify-content-center">
+            <div class="col text-center">
+              <%= form.submit "Invia messaggio" , class: "btn  mt-3 mx-5 darkR" %>
+            </div>
+          </div>
+          <!-- Checkbox -->
+          <!-- Submit button -->
+        <% end %>
       </div>
-
-      <div class="form-group">
-        <%= form.submit "Invia" , class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+<% if current_user == @user%>
+  <% if !@user.messages.empty?%>
+    <div class="row mt-4">
+      <h3 class="mx-auto text-center fw-bold">Questi sono i tuoi messaggi </h3>
+      <div class="col-8 mx-auto mt-3">
+        <ol class="list-group list-group-numbered">
+          <% @user.messages.each do |messaggio|%>
+            <% if messaggio.messanger != nil %>
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold"><%= messaggio.messanger.nome%></div>
+                  <%= messaggio.testo %>
+                </div>
+                <span class="badge  rounded-pill"><%= link_to 'Rispondi' , messaggio.messanger, class: "text-secondary" %></span>
+                <span class="badge  rounded-pill"><%= link_to 'Elimina messaggio' , [messaggio.user, messaggio], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
+                </span>
+              </li>
+            <% end %>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+  <% end %>
+  <div class="text-center">
+  <%= link_to 'Modifica il tuo profilo', edit_registration_path(current_user), class: "text-center" %>
+  </div>
+<% end %>
+<% else %>
+  <div class="px-4 pt-3 pb-2 mt-2 mb-0 text-center">
+    <h1 class="display-5 fw-bold"><%= @user.nome%></h1>
+  </div>
+  <% if current_user == @user %>
+    <% if !@user.messages.empty? %>
+      <div class="row mt-4">
+        <h3 class="mx-auto text-center fw-bold">Questi sono i tuoi messaggi </h3>
+        <div class="col-8 mx-auto mt-3">
+          <ol class="list-group list-group-numbered">
+            <% @user.messages.each do |messaggio|%>
+              <% if messaggio.messanger != nil %>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold"><%= messaggio.messanger.nome%></div>
+                    <%= messaggio.testo %>
+                  </div>
+                  <span class="badge  rounded-pill"><%= link_to 'Rispondi' , messaggio.messanger, class: "text-secondary" %></span>
+                  <span class="badge  rounded-pill"><%= link_to 'Elimina messaggio' , [messaggio.user, messaggio], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
+                  </span>
+                </li>
+              <% end %>
+            <% end %>
+          </ol>
+        </div>
+      </div>
+    <% else %>
+      <h3 class="mx-auto text-center fw-bold">Non hai ricevuto nessun messaggio </h3>
+    <% end %>
+  <% else %>
+    <% if user_signed_in? and (current_user.has_role? :student or current_user.has_role? :teacher or current_user.has_role? :admin) and current_user != @user%>
+      <div class="col" id="lasciaMessaggio">
+        <%= form_with model: [ @user, @user.messages.build] do |form| %>
+          <h4 class="text-center pt-3 fw-bold"> Manda un messaggio </h4>
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <div class="form-group mx-5">
+              <%= form.label :testo, class: 'd-none'%><br>
+              <%= form.text_area :testo, class: 'form-control' , rows: '2 ' %>
+            </div>
+          </div>
+          <!-- Email input -->
+          <div class="row justify-content-center">
+            <div class="col text-center">
+              <%= form.submit "Invia messaggio" , class: "btn  mt-3 mx-5 darkR" %>
+            </div>
+          </div>
+          <!-- Checkbox -->
+          <!-- Submit button -->
+        <% end %>
       </div>
     <% end %>
   <% end %>
-
-  <% if current_user == @user%>
-    <div class="container">
-      <h3>Questi sono i messaggi che hai ricevuto
-      </h3>
-      <ul>
-        <% @user.messages.each do |messaggio|%>
-          <% if messaggio.messanger != nil %>
-            <li>
-              <%= messaggio.testo %>
-              <%= messaggio.messanger.email%>
-              <%= link_to 'Elimina messaggio' , [messaggio.user, messaggio], method: :delete, data: { confirm: "Sei sicuro?" }, class: "text-danger" %>
-              <%= link_to 'Rispondi' , messaggio.messanger, class: "text-secondary" %>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% end %>
+<% if user_signed_in? and !current_user.has_role? :teacher and !current_user.has_role? :admin and !current_user.has_role? :admin%>
+<div class="text-center">
+  <%= link_to 'Modifica il tuo profilo', edit_registration_path(current_user), class: "text-center" %>
+  </div>
 <% end %>

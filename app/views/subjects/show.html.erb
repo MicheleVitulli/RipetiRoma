@@ -1,8 +1,5 @@
 <p id="notice"><%= notice %></p>
-
-<h3>
-  <%= @subject.name %>
-</h3>
+<!--
 <ul>
   Insegnata da
   <% @users.each do |insegnante| %>
@@ -23,3 +20,57 @@
 <% end %>
 <br>
 <%= link_to 'Torna indietro', subjects_path %>
+-->
+<header class="py-4 border-bottom mb-1 rounded">
+  <div class="container" >
+    <div class="text-center my-1">
+      <h1 class="fw-bolder"><%= @subject.name %></h1>
+      <p class="lead mb-0">Puoi ripassare questa materia con i seguenti insegnanti, per iniziare un corso con uno di loro, clicca sul nome e poi manda un messaggio!</p>
+    </div>
+  </div>
+</header>
+<!-- Page content-->
+
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 mt-4">
+  <% @users.each do |insegnante| %>
+    <% if insegnante.has_role? :teacher and insegnante.subjects.include? @subject%>
+      <div class="col mb-3">
+        <div class="card border-dark">
+          <div class="card-header text-center"><%= link_to insegnante.nome, user_path(insegnante) %></div>
+          <div class="row g-0">
+            <div class="col-6">
+               <% if insegnante.avatar.attached? %>
+                <%= image_tag(insegnante.avatar_thumbnail, class: " rounded-start p-2") %>
+              <% else %>
+                <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <div class="card-body">
+                <% insegnante.subjects.each do |materia| %>
+                  <ul class="list-group">
+                    <li class="list-group-item border-0">
+                      <%= materia.name%>
+                    </li>
+                  </ul>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<div class="text-center">
+<% if user_signed_in? and current_user.has_role? :teacher %>
+  <% if current_user.subjects.exists?(name: @subject.name) %>
+    <h5><%= link_to 'Smetti di Insegnare', noninsegna_materia_user_path%></h5>
+  <% else %>
+    <h5><%= link_to 'Inizia ad insegnare', insegna_materia_user_path(@subject.id)%></h5>
+  <% end %>
+<% end %>
+</div>
+

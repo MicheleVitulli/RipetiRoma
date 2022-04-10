@@ -1,83 +1,37 @@
-<% if not user_signed_in? %>
-  <h5>Questi sono i nostri insegnanti</h5>
-<% end %>
-<% @users.each do |utente| %>
-  <% if not user_signed_in? %>
-    <% if utente.has_role? :teacher %>
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title"><%= utente.email %></h5>
-          <h6>
-            Insegna</h6>
-          <% utente.subjects.each do |materia| %>
-            <ul>
-              <li>
-                <%= materia.name%>
-              </li>
-            </ul>
-          <% end %>
-          <a><%= link_to "Vedi recensioni", utente%></a>
+<div class="px-4 py-5 my-2 text-center">
+  <h1 class="display-5 fw-bold">I nostri fantastici insegnanti</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Questi sono i nostri insegnanti, ognuno può aiutarti nelle materie che vedi nella sua scheda. Per iniziare un corso con lui, clicca sul suo nome e poi mandagli un messaggio!</p>
+  </div>
+</div>
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
+  <% @users.each do |utente| %>
+    <% if utente.has_role? :teacher and current_user != utente %>
+      <div class="col mb-3">
+        <div class="card border-dark h-100">
+          <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
+          <div class="row g-0">
+            <div class="col-6">
+              <% if utente.avatar.attached? %>
+                <%= image_tag(utente.avatar_thumbnail, class: " rounded-start p-2") %>
+              <% else %>
+                <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
+              <% end %>
+            </div>
+            <div class="col-6">
+              <div class="card-body">
+                <% utente.subjects.each do |materia| %>
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <%=link_to materia.name, materia%>
+                    </li>
+                  </ul>
+                <% end %>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     <% end %>
-
-  <% else %>
-
-    <% if current_user.has_role? :admin or current_user.has_role? :student or current_user.has_role? :teacher %>
-      <% if utente.has_role? :teacher %>
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title"><%= utente.email %></h5>
-            <p>
-
-              <p>Insegnante</p>
-
-              <% if current_user == utente and current_user.has_role? :teacher%>
-
-                <a><%= link_to "Vedi il tuo profilo", utente%></a>
-              <% else %>
-                <a><%= link_to "Vedi recensioni", utente%></a>
-              <% end %>
-
-              <% if current_user.has_role? :admin %>
-                <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
-                <h6>Ha questi studenti</h6>
-                <ul>
-                  <% unici = [] %>
-                    <% utente.students.each do |studente| %>
-                      <% if not unici.include? studente%>
-                        <% unici.push(studente)%>
-                          <li>
-                            <%= studente.email %></li>
-
-                        <% end %>
-                      <%end%>
-                    <% end %>
-
-                    <h6>Insegna queste materie</h6>
-                    <ul>
-                      <% utente.subjects.each do |materia| %>
-                        <li>
-                          <%= materia.name %></li>
-                      <%end%>
-                    </ul>
-
-                </ul>
-                <% elsif current_user.has_role? :admin%>
-                  <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title"><%= utente.email %></h5>
-                      <p>
-                        <p>Studente</p>
-                        <% if current_user.has_role? :admin %>
-                          <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
-                        <% end %>
-                        <a><%= link_to "Ispeziona", utente%></a>
-                      <% end %>
-                    </p>
-
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% end %>
+  <% end %>
+</div>

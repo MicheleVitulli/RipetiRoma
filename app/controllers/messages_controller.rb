@@ -4,13 +4,10 @@ class MessagesController < ApplicationController
   def create
     @messaged = User.find(params[:user_id])
     @message = @messaged.messages.create(message_params)
-    #redirect_to user_path(@recensito)
-    #render :text => params[:review_params][:testo]
-    if @message.save
-      redirect_to user_path(@messaged)
-    end
+    # redirect_to user_path(@recensito)
+    # render :text => params[:review_params][:testo]
+    redirect_to user_path(@messaged) if @message.save
   end
-
 
   def destroy
     @message = Message.find(params[:id])
@@ -20,6 +17,6 @@ class MessagesController < ApplicationController
 
   def message_params
     p = params.require(:message).permit(:testo, :messanger)
-    {:testo=> p[:testo], :messanger=>current_user}
+    { testo: p[:testo], messanger: current_user }
   end
 end

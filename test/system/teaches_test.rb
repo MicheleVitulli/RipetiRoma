@@ -1,45 +1,45 @@
-require "application_system_test_case"
+require 'application_system_test_case'
 
 class TeachesTest < ApplicationSystemTestCase
   setup do
     @teach = teaches(:one)
   end
 
-  test "visiting the index" do
+  test 'visiting the index' do
     visit teaches_url
-    assert_selector "h1", text: "Teaches"
+    assert_selector 'h1', text: 'Teaches'
   end
 
-  test "creating a Teach" do
+  test 'creating a Teach' do
     visit teaches_url
-    click_on "New Teach"
+    click_on 'New Teach'
 
-    fill_in "Subject", with: @teach.subject_id
-    fill_in "Teacher", with: @teach.teacher_id
-    click_on "Create Teach"
+    fill_in 'Subject', with: @teach.subject_id
+    fill_in 'Teacher', with: @teach.teacher_id
+    click_on 'Create Teach'
 
-    assert_text "Teach was successfully created"
-    click_on "Back"
+    assert_text 'Teach was successfully created'
+    click_on 'Back'
   end
 
-  test "updating a Teach" do
+  test 'updating a Teach' do
     visit teaches_url
-    click_on "Edit", match: :first
+    click_on 'Edit', match: :first
 
-    fill_in "Subject", with: @teach.subject_id
-    fill_in "Teacher", with: @teach.teacher_id
-    click_on "Update Teach"
+    fill_in 'Subject', with: @teach.subject_id
+    fill_in 'Teacher', with: @teach.teacher_id
+    click_on 'Update Teach'
 
-    assert_text "Teach was successfully updated"
-    click_on "Back"
+    assert_text 'Teach was successfully updated'
+    click_on 'Back'
   end
 
-  test "destroying a Teach" do
+  test 'destroying a Teach' do
     visit teaches_url
     page.accept_confirm do
-      click_on "Destroy", match: :first
+      click_on 'Destroy', match: :first
     end
 
-    assert_text "Teach was successfully destroyed"
+    assert_text 'Teach was successfully destroyed'
   end
 end

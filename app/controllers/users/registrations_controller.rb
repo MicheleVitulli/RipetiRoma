@@ -3,9 +3,9 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
-  #after_action :assing_role, only:[:create]
+  # after_action :assing_role, only:[:create]
 
-#  acts_as_user :roles => [:guest, :studente, :insegnante, :admin]
+  #  acts_as_user :roles => [:guest, :studente, :insegnante, :admin]
 
   # GET /resource/sign_up
   # def new
@@ -15,13 +15,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
-      if current_user.has_role(:teacher)
-        current_user.create_teacher(f_name: "",l_name: "",email: self.email, phone: "")
-      elsif current_user.has_role(:student)
-        current_user.create_student(f_name: "",l_name: "",email: self.email, phone: "")
-      end
-
-   end
+    # if current_user.has_role(:teacher)
+    #  current_user.create_teacher(f_name: "",l_name: "",email: self.email, nome: self.nome, phone: "")
+    # elsif current_user.has_role(:student)
+    #  current_user.create_student(f_name: "",l_name: "",email: self.email, nome: self.nome, phone: "")
+    # end
+  end
 
   # GET /resource/edit
   # def edit
@@ -30,8 +29,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # PUT /resource
   # def update
-  #   super
+  # super
   # end
+  #def update_resource(resource, params)
+  #  super
+  #  resource.update_without_password(params)
+  #end
+  def update_resource(resource, params)
+    resource.update_without_password(params)
+      
+    if @user.ruolo == 'Insegnante'
+      @user.roles = []
+      @user.add_role(:teacher)
+    elsif @user.ruolo == 'Studente'
+      @user.roles = []
+      @user.add_role(:student)
+    end
+  end
+
+
+  def after_update_path_for(resource)
+    user_path(resource) # Specify the redirect destination path here
+  end
 
   # DELETE /resource
   # def destroy
@@ -55,8 +74,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # If you have extra params to permit, append them to the sanitizer.
-   #def configure_account_update_params
-    #   devise_parameter_sanitizer.permit(:account_update, keys: [:ruolo])
+  # def configure_account_update_params
+  #   devise_parameter_sanitizer.permit(:account_update, keys: [:ruolo])
   # end
 
   # The path used after sign up.

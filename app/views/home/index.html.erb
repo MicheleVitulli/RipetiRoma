@@ -1,6 +1,4 @@
-<h1>Home</h1>
-
-<p><%= link_to "vedi tutte le materie", "/subjects"%></p>
+<!-- <p><%= link_to "vedi tutte le materie", "/subjects"%></p>
 <p><%= link_to "vedi tutti gli insegnanti", "/users/index"%></p>
 <% if user_signed_in?%>
   <% if current_user.has_role? :admin or current_user.has_role? :teacher or current_user.has_role? :student%>
@@ -26,65 +24,56 @@
     <% else %>
       <p>Non hai fatto l'accesso</p>
     <% end %>
-
-
-
-
-    <!-- Responsive navbar-->
-        
-        <!-- Page header with logo and tagline-->
-        <header class="py-5 bg-light bg-gradient border-bottom mb-4 rounded">
-            <div class="container " >
-                <div class="text-center my-5">
-                    <h1 class="fw-bolder">Benvenuto su Tesi di Michele</h1>
-                    <p class="lead mb-0">Questo è un sito di ripetizioni</p>
-                </div>
+-->
+<!-- Responsive navbar-->
+<!-- Page header with logo and tagline-->
+<header class="py-4  border-bottom mb-1 rounded">
+  <div class="container " >
+    <div class="text-center my-1">
+      <h1 class="fw-bolder">Benvenuto su Tesi di Michele</h1>
+      <p class="lead mb-0">Questo è un sito di ripetizioni</p>
+    </div>
+  </div>
+</header>
+<!-- Page content-->
+<div class="container">
+  <!-- Nested row for non-featured blog posts-->
+  <div class="row justify-content-center card-deck">
+    <div class="col-lg-3 col-md-3 col-5 m-2">
+      <!-- Insegnanti-->
+      <div class="card text-center border-dark h-100" >
+        <img class="card-img-top p-3" src="<%= asset_path('hat.png')%>" alt="..." />
+        <div class="card-body mx-auto">
+          <%= link_to "Insegnanti", "/users/index", class: "btn btn-dark" %>
+          <p class="card-text mt-2">Scopri chi sono i nostri fantastici professori che ti aiuteranno nelle materie che preferisci.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-5 m-2">
+      <!-- Materie-->
+      <div class="card text-center border-dark h-100" >
+        <img class="card-img-top p-3" src="<%= asset_path('pen.png')%>" alt="..." />
+        <div class="card-body mx-auto">
+          <%= link_to "Materie", "/subjects", class: "btn btn-dark" %>
+          <p class="card-text mt-2">Scopri quali materie puoi ripassare con noi.</p>
+        </div>
+      </div>
+    </div>
+    <% if user_signed_in? %>
+      <% if current_user.has_role? :admin or current_user.has_role? :teacher or current_user.has_role? :student%>
+        <div class="col-lg-3 col-md-3 col-5 m-2 ">
+          <!-- Blog post-->
+          <div class="card text-center border-dark h-100" >
+            <img class="card-img-top p-3" src="<%= asset_path('textbook.png')%>" alt="..." />
+            <div class="card-body mx-auto">
+              <%= link_to "I tuoi corsi", "/courses", class: "btn btn-dark" %>
+              <p class="card-text mt-2">Clicca qui per dare un'occhiata ai tuoi corsi</p>
             </div>
-        </header>
-        <!-- Page content-->
-        <div class="container">
-            
-                    <!-- Nested row for non-featured blog posts-->
-                    <div class="row justify-content-center card-deck">
-                        <div class="col-lg-3 mx-4">
-                            <!-- Insegnanti-->
-                            <div class="card text-center border-dark" >
-                                <img class="card-img-top p-3" src="<%= asset_path('hat.png')%>" alt="..." />
-                                <div class="card-body mx-auto">
-                                    <%= link_to "Insegnanti", "/users/index", class: "btn btn-dark" %>
-                                    <p class="card-text mt-2">Scopri chi sono i nostri fantastici professori che ti aiuteranno nelle materie che preferisci.</p>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col-lg-3 mx-4">
-                            <!-- Materie-->
-                            <div class="card text-center border-dark" >
-                                <img class="card-img-top p-3" src="<%= asset_path('pen.png')%>" alt="..." />
-                                <div class="card-body mx-auto">
-                                    <%= link_to "Materie", "/subjects", class: "btn btn-dark" %>
-                                    <p class="card-text mt-2">Scopri quali materie puoi ripassare con noi.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <% if user_signed_in?%>
-                        <% if current_user.has_role? :admin or current_user.has_role? :teacher or current_user.has_role? :student%>
-                          <div class="col-lg-3 mx-4">
-                            <!-- Blog post-->
-                            <div class="card text-center border-dark" >
-                                <img class="card-img-top" src="<%= asset_path('textbook.png')%>" alt="..." />
-                                <div class="card-body mx-auto">
-                                    <%= link_to "I tuoi corsi", "/courses", class: "btn btn-dark" %>
-                                    <p class="card-text mt-2">Clicca qui per dare un'occhiata ai tuoi corsi</p>
-                                </div>
-                            </div>
-                        </div>
-                        <% end %>
-                        
-                        <% end %>
-                    </div>
-                    
-                </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark mt-5">
-            <div class="container"><p class="m-0 text-center text-white">Michele Vitulli</p></div>
-        </footer>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    
+  </div>
+</div>
+<!-- Footer-->

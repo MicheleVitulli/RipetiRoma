@@ -1,1 +1,1 @@
-json.partial! "teaches/teach", teach: @teach
+json.partial! 'teaches/teach', teach: @teach

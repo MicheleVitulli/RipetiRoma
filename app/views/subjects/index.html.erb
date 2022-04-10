@@ -1,7 +1,6 @@
 <p id="notice"><%= notice %></p>
-
+<!--
 <h1>Subjects</h1>
-
 <table>
   <thead>
     <tr>
@@ -9,25 +8,69 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
   <tbody>
     <% @subjects.each do |subject| %>
       <tr>
         <td><%= subject.name %></td>
         <% if not user_signed_in? or current_user.has_role? :student %>
           <td><%= link_to 'Vedi chi la insegna', subject %></td>
-          <% elsif current_user.has_role? :teacher%>
-            <td><%= link_to 'Vedi chi la insegna/ inizia ad insegnare', subject %></td>
-          <% end %>
-          <% if user_signed_in? and current_user.has_role? :admin%>
-            <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        <% elsif current_user.has_role? :teacher%>
+          <td><%= link_to 'Vedi chi la insegna/ inizia ad insegnare', subject %></td>
+        <% end %>
+        <% if user_signed_in? and current_user.has_role? :admin%>
+          <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<% if user_signed_in? and  current_user.has_role? :admin%>
+  <%= link_to 'New Subject', new_subject_path %>
+<% end %>
 
-  <br>
-  <% if user_signed_in? and  current_user.has_role? :admin%>
-    <%= link_to 'New Subject', new_subject_path %>
+-->
+<header class="py-4 border-bottom mb-1 rounded">
+  <div class="container " >
+    <div class="text-center my-1">
+      <h1 class="fw-bolder">Materie</h1>
+      <% if !user_signed_in? or current_user.has_role? :student%>
+        <p class="lead mb-0">Ecco le materie che puoi ripassare con noi, clicca su "Insegnanti" per scoprire chi può darti una mano.</p>
+      <% elsif current_user.has_role? :teacher%>
+        <p class="lead mb-0">Ecco cosa puoi iniziare a insegnare!</p>
+      <% end %>
+    </div>
+  </div>
+</header>
+<!-- Page content-->
+<div class="container">
+  <div class="row justify-content-center card-deck mt-3">
+    <% @subjects.each do |subject| %>
+      <div class="col-lg-3 col-md-3 col-5 m-2">
+        <div class="card text-center bg-light border-dark h-100" >
+          <h5 class="card-title mt-2"><strong><%= subject.name %></h5>
+          </strong>
+          <div class="card-body mx-auto">
+            <% if not user_signed_in? or current_user.has_role? :student or current_user.has_role? :admin %>
+              <td><%= link_to 'Insegnanti', subject %></td>
+            <% elsif current_user.has_role? :teacher%>
+              <%if current_user.subjects.include? subject%>
+                <td><%= link_to 'Ispeziona (o smetti di insegnare)', subject %></td>
+              <% else %>
+                <td><%= link_to 'Ispeziona (o inizia ad insegnare)', subject %></td>
+              <% end %>
+            <% end %>
+            <% if user_signed_in? and current_user.has_role? :admin%>
+              <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' }, class: "text-warning" %></td>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="container text-center mt-5">
+  <% if user_signed_in? and current_user.has_role? :admin %>
+    <h4 class="text-warning"><%= link_to 'Nuova materia', new_subject_path, class: "text-warning"  %></h4>
   <% end %>
+</div >

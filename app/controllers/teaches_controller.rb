@@ -1,5 +1,5 @@
 class TeachesController < ApplicationController
-  before_action :set_teach, only: %i[ show edit update destroy ]
+  before_action :set_teach, only: %i[show edit update destroy]
   load_and_authorize_resource
   # GET /teaches or /teaches.json
   def index
@@ -9,8 +9,7 @@ class TeachesController < ApplicationController
   end
 
   # GET /teaches/1 or /teaches/1.json
-  def show
-  end
+  def show; end
 
   # GET /teaches/new
   def new
@@ -18,8 +17,7 @@ class TeachesController < ApplicationController
   end
 
   # GET /teaches/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /teaches or /teaches.json
   def create
@@ -27,7 +25,7 @@ class TeachesController < ApplicationController
 
     respond_to do |format|
       if @teach.save
-        format.html { redirect_to @teach, notice: "Teach was successfully created." }
+        format.html { redirect_to @teach, notice: 'Teach was successfully created.' }
         format.json { render :show, status: :created, location: @teach }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +38,7 @@ class TeachesController < ApplicationController
   def update
     respond_to do |format|
       if @teach.update(teach_params)
-        format.html { redirect_to @teach, notice: "Teach was successfully updated." }
+        format.html { redirect_to @teach, notice: 'Teach was successfully updated.' }
         format.json { render :show, status: :ok, location: @teach }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,19 +51,20 @@ class TeachesController < ApplicationController
   def destroy
     @teach.destroy
     respond_to do |format|
-      format.html { redirect_to teaches_url, notice: "Teach was successfully destroyed." }
+      format.html { redirect_to teaches_url, notice: 'Teach was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_teach
-      @teach = Teach.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def teach_params
-      params.require(:teach).permit(:teacher_id, :subject_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_teach
+    @teach = Teach.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def teach_params
+    params.require(:teach).permit(:teacher_id, :subject_id)
+  end
 end
