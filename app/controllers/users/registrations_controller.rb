@@ -15,6 +15,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
+
     # if current_user.has_role(:teacher)
     #  current_user.create_teacher(f_name: "",l_name: "",email: self.email, nome: self.nome, phone: "")
     # elsif current_user.has_role(:student)
@@ -31,13 +32,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def update
   # super
   # end
-  #def update_resource(resource, params)
+  # def update_resource(resource, params)
   #  super
   #  resource.update_without_password(params)
-  #end
+  # end
   def update_resource(resource, params)
     resource.update_without_password(params)
-      
+
     if @user.ruolo == 'Insegnante'
       @user.roles = []
       @user.add_role(:teacher)
@@ -46,7 +47,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @user.add_role(:student)
     end
   end
-
 
   def after_update_path_for(resource)
     user_path(resource) # Specify the redirect destination path here

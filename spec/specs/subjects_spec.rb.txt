@@ -1,0 +1,44 @@
+require 'rails_helper'
+require "cancan/matchers"
+
+describe SubjectsController, type: :controller do
+  context 'with student credentials' do
+    before :each do
+      @user = create :user
+      @user.add_role(:student)
+      sign_in @user
+    end
+    it 'should not create subjects' do
+      params = { subject: { name: 'Matematica' } }
+      expect { get :create, params: params }.to raise_error(CanCan::AccessDenied)
+    end
+  end
+  context 'with teacher credentials' do
+    before :each do
+      @user = create :user
+      @user.add_role(:teacher)
+      sign_in @user
+    end
+    it 'should not create subjects' do
+      params = { subject: { name: 'Matematica' } }
+      expect { get :create, params: params }.to raise_error(CanCan::AccessDenied)
+    end
+  end
+  context 'with admin credentials' do
+    before :each do
+      @user = create :user
+      @user.add_role(:admin)
+      sign_in @user
+    end
+    it 'should create subjects' do
+      params = { subject: { name: 'Matematica' } }
+      expect { get :create, params: params }.not_to raise_error
+    end
+
+   
+
+  end
+end
+
+
+

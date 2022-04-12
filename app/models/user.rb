@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   rolify
+  serialize :postals, Array
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: %i[facebook google_oauth2]
@@ -45,6 +46,15 @@ class User < ActiveRecord::Base
   def self.search(search)
     if search
       User.where(email: search)
+    else
+      []
+    end
+  end
+
+  def self.searchP(search)
+    if search
+      @user = User.all.select { |u| u.postals.include? search }
+      @user
     else
       []
     end

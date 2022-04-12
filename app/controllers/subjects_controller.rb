@@ -3,7 +3,7 @@ class SubjectsController < ApplicationController
   load_and_authorize_resource
 
   def aggiungi_materia
-    #render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
+    # render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
     @corso.subject = @materia
@@ -58,6 +58,13 @@ class SubjectsController < ApplicationController
 
   # DELETE /subjects/1 or /subjects/1.json
   def destroy
+    @users = User.all
+    @users.each do |utente|
+      if utente.subjects.include? @subject
+        puts 'Vincolo ELiminato'
+        utente.subjects.delete(@subject)
+      end
+    end
     @subject.destroy
     respond_to do |format|
       format.html { redirect_to subjects_url, notice: 'Subject was successfully destroyed.' }
