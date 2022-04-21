@@ -1,0 +1,23 @@
+attributes:
+  - content
+  - foreign_key
+  - primary_key
+  - inheritance
+disconnected: false
+filename: erd
+filetype: pdf
+indirect: true
+inheritance: true
+markup: true
+notation: bachman
+orientation: orizontal
+polymorphism: false
+sort: true
+warn: true
+title: Ripetiromait
+exclude: ActiveStorage::Blob,ActiveStorage::VariantRecord, ActiveStorage::Attachment
+only: null
+only_recursion_depth: null
+prepend_primary: true
+cluster: true
+splines: spline

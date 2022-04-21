@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TeachesController < ApplicationController
   before_action :set_teach, only: %i[show edit update destroy]
   load_and_authorize_resource

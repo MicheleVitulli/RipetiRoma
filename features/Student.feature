@@ -37,7 +37,6 @@ Scenario: Deleting a review
     When I follow 'Elimina recensione'
     Then I should not see 'Ottimo insegnante'
 
-
 Scenario: Sending a message
     Given I am Student
     Given a random 'Roberto' Teacher
@@ -68,4 +67,14 @@ Scenario: Changing email
     And I press "Conferma"
     Then I should be on 'Domenico' 'users' show path
     And 'Domenico' email is "nuova@email.it"
+
+Scenario: Select teacher by cap
+    Given I am Student
+    Given a random 'Roberto' Teacher with '00158' CAP
+    When I follow 'Insegnanti'
+    Then I should see 'Cerca tramite CAP' button
+    When I fill in "search" with '00158'
+    And I press "Cerca tramite CAP"
+    Then I should see 'Roberto'
+
 

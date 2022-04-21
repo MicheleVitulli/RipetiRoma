@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -28,6 +30,7 @@ gem 'cancancan', '~> 3.3.0'
 gem 'devise'
 gem 'image_processing', '~> 1.2'
 gem 'rolify'
+gem "simple_calendar", "~> 2.4"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
@@ -46,6 +49,9 @@ group :development do
   gem 'rack-mini-profiler', '~> 2.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'rails-erd'
+  gem 'railroady'
+  gem 'erd'
 end
 
 group :test do
@@ -69,8 +75,6 @@ gem 'rubocop', '~> 1.26', require: false
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-# Facebook  e Google login
 gem 'omniauth'
-gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'

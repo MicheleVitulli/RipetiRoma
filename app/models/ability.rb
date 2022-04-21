@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
@@ -22,7 +24,6 @@ class Ability
       can :read, Subject
       can %i[read create], User
       can :read, Review
-
     end
   end
 end

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class SubjectsController < ApplicationController
   before_action :set_subject, only: %i[show edit update destroy]
-  load_and_authorize_resource
+  authorize_resource
 
   def aggiungi_materia
-    # render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
+    #render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
     @corso.subject = @materia
@@ -81,6 +83,6 @@ class SubjectsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def subject_params
-    params.require(:subject).permit(:name, :course_id, :subject_id)
+    params.require(:subject).permit(:name, :course_id, :subject_id, :materia_id)
   end
 end

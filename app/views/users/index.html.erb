@@ -4,42 +4,10 @@
     <p class="lead mb-4">Questi sono i nostri insegnanti, ognuno può aiutarti nelle materie che vedi nella sua scheda. Per iniziare un corso con lui, clicca sul suo nome e poi mandagli un messaggio!</p>
   </div>
 </div>
-<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
-  <% @users.each do |utente| %>
-    <% if utente.has_role? :teacher and current_user != utente %>
-      <div class="col mb-3">
-        <div class="card border-dark h-100">
-          <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
-          <div class="row g-0">
-            <div class="col-6">
-              <% if utente.avatar.attached? %>
-                <%= image_tag(utente.avatar_thumbnail, class: " rounded-start p-2") %>
-              <% else %>
-                <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
-              <% end %>
-            </div>
-            <div class="col-6">
-              <div class="card-body">
-                <% utente.subjects.each do |materia| %>
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <%=link_to materia.name, materia%>
-                    </li>
-                  </ul>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  <% end %>
-</div>
-
 <%= form_tag(users_path, method: :get) do %>
-<div class="row  border-light justify-content-center">
+  <div class="row  border-light justify-content-center">
     <div class="col-7 mb-2 col-md-6"><%= text_field_tag :search, params[:search], class: "form-control "%></div>
-    <div class="col-7 col-md-4 text-center"><%= submit_tag "Cerca tramite CAP", class: "btn bg-light" %></div>
+    <div class="col-7 col-md-4 text-center"><%= submit_tag "Cerca tramite CAP", class: "btn bg-warning" %></div>
   </div>
 <% end %>
 <% if !@usersR.empty? %>
@@ -57,10 +25,12 @@
     </iframe>
   </div>
 <% end %>
-<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4">
-  <% @usersR.each do |utente| %>
-    <div class="col mb-3">
-      <div class="card border-dark h-100">
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 mt-5">
+  <% @users.each do |utente| %>
+    <% if @usersR.include? utente%>
+     <div class="col mb-3">
+      <div class="card bg-warning border-dark h-100">
         <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
         <div class="row g-0">
           <div class="col-6">
@@ -84,7 +54,36 @@
         </div>
       </div>
     </div>
+    <% else %>
+      <% if utente.has_role? :teacher and current_user != utente %>
+        <div class="col mb-3">
+          <div class="card border-dark h-100">
+            <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
+            <div class="row g-0">
+              <div class="col-6">
+                <% if utente.avatar.attached? %>
+                  <%= image_tag(utente.avatar_thumbnail, class: " rounded-start p-2") %>
+                <% else %>
+                  <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
+                <% end %>
+              </div>
+              <div class="col-6">
+                <div class="card-body">
+                  <% utente.subjects.each do |materia| %>
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <%=link_to materia.name, materia%>
+                      </li>
+                    </ul>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyf9VIldF1yowMm9Y2Q0zoRyWWPZ3XOSE"
-    async defer></script> 
+    async defer></script>

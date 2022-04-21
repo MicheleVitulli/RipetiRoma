@@ -1,0 +1,53 @@
+<div class="simple-calendar">
+  <!--
+  <div class="calendar-heading">
+    <%= link_to t('simple_calendar.previous', default: 'Previous'), calendar.url_for_previous_view %>
+    <% if calendar.number_of_weeks == 1 %>
+      <span class="calendar-title"><%= t('simple_calendar.week', default: 'Week') %> <%= calendar.week_number %></span>
+    <% else %>
+      <span class="calendar-title"><%= t('simple_calendar.week', default: 'Week') %> <%= calendar.week_number %> - <%= calendar.end_week %></span>
+    <% end %>
+    <%= link_to t('simple_calendar.next', default: 'Next'), calendar.url_for_next_view %>
+  </div>
+  -->
+  <table class="table table-striped m-4">
+    <thead>
+      <tr>
+        <% i = 0 %>
+        <% while i< 7%>
+          <% if i == 0 %>
+            <th>Lun</th>
+          <% elsif i == 1%>
+            <th>Mar</th>
+          <% elsif i == 2%>
+            <th>Mer</th>
+          <% elsif i == 3%>
+            <th>Gio</th>
+          <% elsif i == 4%>
+            <th>Ven</th>
+          <% elsif i == 5%>
+            <th>Sab</th>
+          <% elsif i == 6%>
+            <th>Dom</th>
+          <% end %>
+          <% i=i+1%>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% date_range.each_slice(7) do |week| %>
+        <tr>
+          <% week.each do |day| %>
+            <%= content_tag :td, class: calendar.td_classes_for(day) do %>
+              <% if defined?(Haml) && respond_to?(:block_is_haml?) && block_is_haml?(passed_block) %>
+                <% capture_haml(day, sorted_events.fetch(day, []), &passed_block) %>
+              <% else %>
+                <% passed_block.call day, sorted_events.fetch(day, []) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CoursesController < ApplicationController
   before_action :set_course, only: %i[show edit update destroy]
   load_and_authorize_resource
@@ -40,9 +42,10 @@ class CoursesController < ApplicationController
   # PATCH/PUT /courses/1 or /courses/1.json
   def update
     respond_to do |format|
+      @course.day = params[:course][:day]
       if @course.update(course_params)
-        format.html { redirect_to @course, notice: 'Course was successfully updated.' }
-        format.json { render :show, status: :ok, location: @course }
+        format.html { redirect_to courses_path, notice: @course.day }
+        format.json { render :index, status: :ok, location: courses_path }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
@@ -68,7 +71,7 @@ class CoursesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def course_params
-    p = params.require(:course).permit(:teacher, :student)
+    p = params.require(:course).permit(:teacher, :student, :day)
     { teacher: current_user }
   end
 end
