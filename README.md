@@ -1,24 +1,3 @@
-# README
+# Ripetiroma
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Ripetiroma è un sito di ripetizioni che si occupa della gestione dei rapporti tra studenti e insegnanti. Permette una facile ricerca e comunicazione tra utenti. Il sito web fa uso del framework **Ruby on Rails**, ed è stato completamente realizzato da **Michele Vitulli**.
