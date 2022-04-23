@@ -6,7 +6,6 @@ class SubjectsController < ApplicationController
   authorize_resource
 
   def aggiungi_materia
-    # render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
     #binding.pry
