@@ -70,15 +70,14 @@
           <div class="form-outline mb-2">
             <%= f.email_field :email, autofocus: true, autocomplete: "new-email", class: "form-control form-control-lg", placeholder: "Email" %>
           </div>
-                    <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
-
-          <div class="form-outline mb-2 text-center">
-            <label  class="form-label">Inserisci le tue zone preferite, tramite CAP</label>
-            <input name="user[postals][]" type="text", value="<%= @user.postals[0] if @user.postals %>" class="m-1"/>
-            <input name="user[postals][]" type="text", value="<%= @user.postals[1] if @user.postals %>", class="m-1"/>
-            <input name="user[postals][]" type="text", value="<%= @user.postals[2] if @user.postals %>", class="m-1"/>
-            <input name="user[postals][]" type="text", value="<%= @user.postals[3] if @user.postals %>", class="m-1"/>
-          </div>
+          <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
+            <div class="form-outline mb-2 text-center">
+              <label  class="form-label">Inserisci le tue zone preferite, tramite CAP</label>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[0] if @user.postals %>" class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[1] if @user.postals %>", class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[2] if @user.postals %>", class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[3] if @user.postals %>", class="m-1"/>
+            </div>
           <% end %>
           <!-- Password input -->
           <div class="divider d-flex align-items-center my-3">
@@ -109,13 +108,13 @@
   {}, { class: "form-select pt-2 mt-0"} %>
           <% end %>
           <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
-          <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0">Solo per insegnanti</p>
-          </div>
-          <div class="input-group mb-2">
-            <span class="input-group-text ">Descriviti brevemente</span>
-            <%= f.text_area :descrizione, class: "form-control", rows: "2"%>
-          </div>
+            <div class="divider d-flex align-items-center my-4">
+              <p class="text-center fw-bold mx-3 mb-0">Solo per insegnanti</p>
+            </div>
+            <div class="input-group mb-2">
+              <span class="input-group-text ">Descriviti brevemente</span>
+              <%= f.text_area :descrizione, class: "form-control", rows: "2"%>
+            </div>
           <% end %>
           <div class="text-center text-lg-center mt-0 pt-2">
             <%= f.submit "Conferma", class: "btn darkR  btn-lg", style: "padding-left: 2.5rem; padding-right: 2.5rem;"%>

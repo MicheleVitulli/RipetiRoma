@@ -30,74 +30,68 @@
                 <h3 class="card-title text-center">
                   <%=course.subject.name%>
                 </h3>
+                <h6 class="card-body text-center">
+                  <%=course.day%>
+                </h6>
                 <% if course.day == nil%>
-                  <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle m-2" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      Seleziona il giorno
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <%= form_with(model: course, course: course) do |form| %>
-                        <%= form.select :day, options_for_select([
-  ["seleziona", ""], 
+                  <%= form_with(model: course, course: course) do |form| %>
+                    <%= form.select :day, options_for_select([
+  ["Seleziona il giorno", ""], 
   'Lunedì', 
   'Martedì', 
   'Mercoledì', 
   'Giovedì', 
   'Sabato',
   'Domenica']), 
-  {}, { class: "form-select pt-2 mt-0" } %>
-                        <%= form.submit "Conferma"%>
-                      <%end%>
-                    </ul>
-                  </div>
-                <% end %>
-              <% else %>
-                <p class="card-text text-danger"> Seleziona la materia del nuovo corso </p>
-                <ul>
-                  <% current_user.subjects.each do |materia| %>
-                    <li><%= link_to materia.name, aggiungi_materia_subject_path(course.id, materia.id) %></li>
-                  <% end %>
-                </ul>
+  {}, { class: "form-select pt-2 mt-0", onchange: 'this.form.submit();' } %>
+                  <%end%>
+            <% end %>
+          <% else %>
+            <p class="card-text text-danger"> Seleziona la materia del nuovo corso </p>
+            <ul>
+              <% current_user.subjects.each do |materia| %>
+                <li><%= link_to materia.name, aggiungi_materia_subject_path(course.id, materia.id) %></li>
               <% end %>
-              <% if current_user.has_role? :teacher %>
-                <div class="card-footer text-muted">
-                  <%= link_to 'Elimina', course, method: :delete, data: { confirm: 'Are you sure?' } %>
-                </div>
-              <% end %>
+            </ul>
+          <% end %>
+          <% if current_user.has_role? :teacher %>
+            <div class="card-footer text-muted">
+              <%= link_to 'Elimina', course, method: :delete, data: { confirm: 'Are you sure?' } %>
             </div>
-          </div>
+          <% end %>
         </div>
-      <% end %>
-    <% end %>
-  </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+</div>
 </div>
 <br>
 <% if current_user.has_role? :teacher %>
- 
 <% end %>
 <%= week_calendar(number_of_weeks: 1) do |date| %>
-<ul>
-  <% @courses.each do |course|%>
-    <% if course.teacher == current_user%>
-      <% if course.day == 'Lunedì' and date.cwday == 1%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <% elsif course.day == 'Martedì' and date.cwday == 2%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
-        <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-      <% elsif course.day == 'Giovedì' and date.cwday == 4%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <% elsif course.day == 'Venerdì' and date.cwday == 5%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <% elsif course.day == 'Sabato' and date.cwday == 6%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <% elsif course.day == 'Domenica' and date.cwday == 7%>
-        <%= course.student.nome + " ("+course.subject.name+") "%>
-      <%end %>
+  <ul>
+    <% @courses.each do |course|%>
+      <% if course.teacher == current_user%>
+        <% if course.day == 'Lunedì' and date.cwday == 1%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Martedì' and date.cwday == 2%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Giovedì' and date.cwday == 4%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Venerdì' and date.cwday == 5%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Sabato' and date.cwday == 6%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <% elsif course.day == 'Domenica' and date.cwday == 7%>
+          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+        <%end %>
+      <% end %>
     <% end %>
-  <% end %>
   </ul>
 <% end %>
- <div class="container text-center">
-    <%= link_to 'Nuovo Corso', new_course_path, class: 'text-center' %>
-  </div>
+<div class="container text-center">
+  <%= link_to 'Nuovo Corso', new_course_path, class: 'text-center' %>
+</div>

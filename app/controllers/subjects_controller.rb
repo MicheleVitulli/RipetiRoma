@@ -1,13 +1,15 @@
 # frozen_string_literal: true
+require 'pry'
 
 class SubjectsController < ApplicationController
   before_action :set_subject, only: %i[show edit update destroy]
   authorize_resource
 
   def aggiungi_materia
-    #render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
+    # render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
+    #binding.pry
     @corso.subject = @materia
     redirect_to '/courses' if @corso.save
   end

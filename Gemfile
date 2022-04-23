@@ -30,7 +30,8 @@ gem 'cancancan', '~> 3.3.0'
 gem 'devise'
 gem 'image_processing', '~> 1.2'
 gem 'rolify'
-gem "simple_calendar", "~> 2.4"
+gem 'simple_calendar', '~> 2.4'
+gem 'pry'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
@@ -48,10 +49,10 @@ group :development do
   gem 'listen', '~> 3.3'
   gem 'rack-mini-profiler', '~> 2.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'rails-erd'
-  gem 'railroady'
   gem 'erd'
+  gem 'railroady'
+  gem 'rails-erd'
+  gem 'spring'
 end
 
 group :test do

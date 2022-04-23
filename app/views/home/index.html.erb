@@ -30,16 +30,15 @@
 <header class="py-4  border-bottom mb-1 rounded">
   <div class="container " >
     <div class="text-center my-1">
-    <% if !user_signed_in? %>
-      <h1 class="fw-bolder">Benvenuto su RipetiRoma</h1>
-      <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
-      visualizzare l'indice dei nostri insegnanti, altrimenti clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi.</p>
+      <% if !user_signed_in? %>
+        <h1 class="fw-bolder">Benvenuto su RipetiRoma</h1>
+        <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
+          visualizzare l'indice dei nostri insegnanti, altrimenti clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi.</p>
       <% else %>
         <h1 class="fw-bolder">Bentornato su RipetiRoma</h1>
-      <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
-      visualizzare l'indice dei nostri insegnanti, clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi oppure 
-      clicca su <strong class="fw-bold">I tuoi corsi</strong> per controllare i tuoi corsi attuali.</p>
-      
+        <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
+          visualizzare l'indice dei nostri insegnanti, clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi oppure 
+          clicca su <strong class="fw-bold">I tuoi corsi</strong> per controllare i tuoi corsi attuali.</p>
       <% end %>
     </div>
   </div>
@@ -82,7 +81,6 @@
         </div>
       <% end %>
     <% end %>
-    
   </div>
 </div>
 <!-- Footer-->
