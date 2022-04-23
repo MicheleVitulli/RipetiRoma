@@ -1,95 +1,89 @@
-
-<% if not user_signed_in? %>
-  <h5>Questi sono i nostri insegnanti</h5>
+<div class="px-4 py-5 my-2 text-center">
+  <h1 class="display-5 fw-bold">I nostri fantastici insegnanti</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Questi sono i nostri insegnanti, ognuno può aiutarti nelle materie che vedi nella sua scheda. Per iniziare un corso con lui, clicca sul suo nome e poi mandagli un messaggio!</p>
+  </div>
+</div>
+<%= form_tag(users_path, method: :get) do %>
+  <div class="row  border-light justify-content-center">
+    <div class="col-7 mb-2 col-md-6"><%= text_field_tag :search, params[:search], class: "form-control "%></div>
+    <div class="col-7 col-md-4 text-center"><%= submit_tag "Cerca tramite CAP", class: "btn bg-warning" %></div>
+  </div>
 <% end %>
-<% @users.each do |utente| %>
-<% if not user_signed_in? %>
-  <% if utente.has_role? :teacher %>
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= utente.email %></h5>
-    </div>
+<% if !@usersR.empty? %>
+  <div class="text-center">
+    <iframe
+  class = "mx-auto"
+  width="333"
+  height="250"
+  loading="lazy"
+  
+  referrerpolicy="no-referrer-when-downgrade"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCAS1xykkuZq7gcXuaxLW2g1H4Z6k_3RVg
+    &q=<%= @cap %>
+    &zoom=12">
+    </iframe>
   </div>
-  <% end %>
+<% end %>
 
-
-<% else %>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <% if current_user.has_role? :admin or current_user.has_role? :student or current_user == utente %>
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= utente.email %></h5>
-      <p>
-              <% if utente.has_role? :teacher %>
-                  <p>Sei un insegnante</p>
-                  <h6>Insegni queste materie</h6>
-                  <ul>
-                  <% utente.subjects.each do |materia| %>
-                    <li> <%= materia.name %></li>
-                  <%end%>
-                  </ul>
-                  <h6>Hai questi studenti</h6>
-                  <ul>
-                    <% unici = [] %>
-                  <% utente.students.each do |studente| %>
-                    <% if not unici.include? studente%>
-                      <% unici.push(studente)%>
-                    <li> <%= studente.email %></li>
-                    <% end %>
-                  <%end%>
-                  </ul>
-              <% elsif utente.has_role? :student %>
-                  <p>Sei uno studente</p>
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 mt-5">
+  <% @users.each do |utente| %>
+    <% if @usersR.include? utente%>
+     <div class="col mb-3">
+      <div class="card bg-warning border-dark h-100">
+        <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
+        <div class="row g-0">
+          <div class="col-6">
+            <% if utente.avatar.attached? %>
+              <%= image_tag(utente.avatar_thumbnail, class: " rounded-start p-2") %>
+            <% else %>
+              <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
+            <% end %>
+          </div>
+          <div class="col-6">
+            <div class="card-body">
+              <% utente.subjects.each do |materia| %>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <%=link_to materia.name, materia%>
+                  </li>
+                </ul>
               <% end %>
-      </p>
-
-
-      <% if current_user.has_role? :admin or current_user == utente%>
-      <a><%= link_to "Cancella Account", destroy_user_path(utente), data: { confirm: "Are you sure?" }, method: :delete %></a>
-      <% end %>
-
-
-      <% if current_user.has_role? :teacher%>
-        <% if current_user == utente %>
-        <a><%= link_to "Vedi le tue recensioni", utente%></a>
-        <% end %>
-
-      <% elsif current_user.has_role? :student %>
-        <% if utente.has_role? :teacher%>
-        <a><%= link_to "Lascia una recensione", utente%></a>
-        <% end %>
-
-      <% else %>
-
-        <a><%= link_to "Ispeziona", utente%></a>
-      <% end %>
-
-
-
-
-      <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+    <% else %>
+      <% if utente.has_role? :teacher and current_user != utente %>
+        <div class="col mb-3">
+          <div class="card border-dark h-100">
+            <div class="card-header text-center"><%= link_to utente.nome, utente %></div>
+            <div class="row g-0">
+              <div class="col-6">
+                <% if utente.avatar.attached? %>
+                  <%= image_tag(utente.avatar_thumbnail, class: " rounded-start p-2") %>
+                <% else %>
+                  <%= image_tag("user.png", class: " rounded-start p-2", height: "120", widht: "120") %>
+                <% end %>
+              </div>
+              <div class="col-6">
+                <div class="card-body">
+                  <% utente.subjects.each do |materia| %>
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <%=link_to materia.name, materia%>
+                      </li>
+                    </ul>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   <% end %>
-  <% end %>
+</div>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyf9VIldF1yowMm9Y2Q0zoRyWWPZ3XOSE"
+    async defer></script>-->

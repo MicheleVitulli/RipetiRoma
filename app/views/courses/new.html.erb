@@ -1,5 +1,5 @@
-<h1>New Course</h1>
-
+<h5 class="text-center">Inserisci la mail dello studente con cui inizierai un corso</h5>
+<!--
 <% @users.each do |utente| %>
   <% if current_user.has_role? :teacher and utente.has_role? :student%>
     <ul>
@@ -10,4 +10,27 @@
     </ul>
   <% end %>
 <% end %>
-<%= link_to 'Back', courses_path %>
+-->
+<div class="container mt-5">
+  <div class="row row-cols-2 justify-content-center">
+    <div class="col-3 mx-auto">
+      <div class="container">
+        <%= form_tag(new_course_path, method: :get, class: 'input-group') do %>
+          <%= text_field_tag(:search, params[:search],class: 'form-comtrol border-dark', placeholder: '@email') %>
+          <%= submit_tag("Cerca", class: "btn btn-outline-success border-dark" )%>
+        <% end %>
+        <% @usersR.each do |utente| %>
+          <% if current_user.has_role? :teacher and utente.has_role? :student %>
+            <ul class="mt-5 list-group text-center ">
+              <li class="list-group-item border-success"><h5><%= utente.nome %></h5>
+              <%= link_to 'Inizia un corso', fa_corso_user_path(utente.id), class: ""%></li>
+            </ul>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="container text-center mt-5">
+    <%= link_to 'Back', courses_path, class: "text-center" %>
+  </div>
+</div>

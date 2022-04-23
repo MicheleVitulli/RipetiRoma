@@ -1,17 +1,17 @@
-class SubjectsController < ApplicationController
-  before_action :set_subject, only: %i[ show edit update destroy ]
-  load_and_authorize_resource
+# frozen_string_literal: true
+require 'pry'
 
+class SubjectsController < ApplicationController
+  before_action :set_subject, only: %i[show edit update destroy]
+  authorize_resource
 
   def aggiungi_materia
-    #render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
+    # render inline: "<%= params[:id] %> <%= params[:materia_id]%>"
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
+    #binding.pry
     @corso.subject = @materia
-    if @corso.save
-
-    redirect_to '/courses'
-    end
+    redirect_to '/courses' if @corso.save
   end
 
   # GET /subjects or /subjects.json
@@ -30,8 +30,7 @@ class SubjectsController < ApplicationController
   end
 
   # GET /subjects/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /subjects or /subjects.json
   def create
@@ -39,7 +38,7 @@ class SubjectsController < ApplicationController
 
     respond_to do |format|
       if @subject.save
-        format.html { redirect_to @subject, notice: "Subject was successfully created." }
+        format.html { redirect_to @subject, notice: 'Subject was successfully created.' }
         format.json { render :show, status: :created, location: @subject }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -52,7 +51,7 @@ class SubjectsController < ApplicationController
   def update
     respond_to do |format|
       if @subject.update(subject_params)
-        format.html { redirect_to @subject, notice: "Subject was successfully updated." }
+        format.html { redirect_to @subject, notice: 'Subject was successfully updated.' }
         format.json { render :show, status: :ok, location: @subject }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -63,21 +62,29 @@ class SubjectsController < ApplicationController
 
   # DELETE /subjects/1 or /subjects/1.json
   def destroy
+    @users = User.all
+    @users.each do |utente|
+      if utente.subjects.include? @subject
+        puts 'Vincolo ELiminato'
+        utente.subjects.delete(@subject)
+      end
+    end
     @subject.destroy
     respond_to do |format|
-      format.html { redirect_to subjects_url, notice: "Subject was successfully destroyed." }
+      format.html { redirect_to subjects_url, notice: 'Subject was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_subject
-      @subject = Subject.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def subject_params
-      params.require(:subject).permit(:name, :course_id, :subject_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_subject
+    @subject = Subject.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def subject_params
+    params.require(:subject).permit(:name, :course_id, :subject_id, :materia_id)
+  end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
@@ -11,16 +13,17 @@ class Ability
       can :manage, Teach, teacher_id: user.id
       can :read, Review
       can :aggiungi_materia, Subject
-      can [:edit, :destroy], User, user: user
+      can %i[read destroy], Message, user_id: user.id
+      can :create, Message
     elsif user.has_role? :student
-        can :read, :all
-        can :manage, Review, reviewer_id: user.id
-        can [:edit, :destroy], User, user: user
+      can :read, :all
+      can :manage, Review, reviewer_id: user.id
+      can %i[edit destroy], User, user: user
+      can %i[create destroy], Message
     else
-        can :read, Subject
-        can [:read, :create], User
-        can :read, Review
-
+      can :read, Subject
+      can %i[read create], User
+      can :read, Review
     end
   end
 end

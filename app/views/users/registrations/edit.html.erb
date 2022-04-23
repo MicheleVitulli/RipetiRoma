@@ -1,17 +1,32 @@
+<!--
 <h2>Edit <%= resource_name.to_s.humanize %></h2>
-
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "users/shared/error_messages", resource: resource %>
-
+  <div class="field">
+    <% if resource.avatar.attached? %>
+      <%= image_tag(resource.avatar_thumbnail) %>
+    <% else %>
+      <img src=<%= asset_path("user.png")  %> height="120" width ="120" >
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.file_field :avatar %>
+  </div>
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
-
+  <div class="field">
+    <%= f.label :nome %><br />
+    <%= f.text_field :nome, autofocus: true, autocomplete: "nome" %>
+  </div>
+  <div class="field">
+    <%= f.label :descrizione %><br />
+    <%= f.text_area :descrizione, autofocus: true %>
+  </div>
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
   <% end %>
-
   <div class="field">
     <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
     <%= f.password_field :password, autocomplete: "new-password" %>
@@ -20,24 +35,98 @@
       <em><%= @minimum_password_length %> characters minimum</em>
     <% end %>
   </div>
-
   <div class="field">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
-
   <div class="field">
     <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
     <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
-
   <div class="actions">
     <%= f.submit "Update" %>
   </div>
 <% end %>
-
 <h3>Cancel my account</h3>
-
 <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
 <%= link_to "Back", :back %>
+-->
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class=" col-md-6 col-xl-5 p-3 d-none d-md-block ">
+        <%= image_tag("classroom.png", class: "img-fluid") %>
+      </div>
+      <div class=" col-md-6 col-xl-4 offset-xl-1">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <%= render "users/shared/error_messages", resource: resource %>
+          <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-center">
+            <p class="lead fw-normal mb-0 me-3">Modifica il tuo account </p>
+          </div>
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0"></p>
+          </div>
+          <!-- Email input -->
+          <div class="form-outline mb-2">
+            <%= f.email_field :email, autofocus: true, autocomplete: "new-email", class: "form-control form-control-lg", placeholder: "Email" %>
+          </div>
+          <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
+            <div class="form-outline mb-2 text-center">
+              <label  class="form-label">Inserisci le tue zone preferite, tramite CAP</label>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[0] if @user.postals %>" class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[1] if @user.postals %>", class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[2] if @user.postals %>", class="m-1"/>
+              <input name="user[postals][]" type="text", value="<%= @user.postals[3] if @user.postals %>", class="m-1"/>
+            </div>
+          <% end %>
+          <!-- Password input -->
+          <div class="divider d-flex align-items-center my-3">
+            <p class="text-center fw-bold mx-3 mb-0"></p>
+          </div>
+          <div class="mb-2">
+            <% if resource.avatar.attached? %>
+              <label  class="form-label">Modifica la tua foto profilo</label>
+              <%= f.file_field :avatar, class: "form-control" %>
+            <% else %>
+              <label  class="form-label">Carica la tua foto profilo</label>
+              <%= f.file_field :avatar, class: "form-control" %>
+            <% end %>
+          </div>
+          <div class="mb-2">
+            <%= f.text_field :nome, autofocus: true, autocomplete: "nome", class: "form-control form-control-lg", placeholder: "Nome e Cognome" %>
+          </div>
+          <!--<div class="mb-2">
+            <%= f.select :role_ids, options_for_select([
+  ["Studente o Insegnante?", ""], 
+  [ "Insegnante", Role.all[1]], ["Studente", Role.all[2]]]), 
+  {}, { class: "form-select pt-2 mt-0" } %>
+          </div>-->
+          <% if !current_user.has_role? :student and !current_user.has_role? :teacher%>
+            <%= f.select :ruolo, options_for_select([
+  ["Studente o Insegnante?", ""], 
+  "Studente", "Insegnante"]), 
+  {}, { class: "form-select pt-2 mt-0"} %>
+          <% end %>
+          <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
+            <div class="divider d-flex align-items-center my-4">
+              <p class="text-center fw-bold mx-3 mb-0">Solo per insegnanti</p>
+            </div>
+            <div class="input-group mb-2">
+              <span class="input-group-text ">Descriviti brevemente</span>
+              <%= f.text_area :descrizione, class: "form-control", rows: "2"%>
+            </div>
+          <% end %>
+          <div class="text-center text-lg-center mt-0 pt-2">
+            <%= f.submit "Conferma", class: "btn darkR  btn-lg", style: "padding-left: 2.5rem; padding-right: 2.5rem;"%>
+          </div>
+        <% end %>
+        <div class="divider d-flex align-items-center my-4">
+          <p class="text-center fw-bold mx-3 mb-0">Eliminazione Account</p>
+        </div>
+        <div class="text-center text-lg-center mt-0 pt-2">
+          <%= link_to 'Elimina', current_user, data: { confirm: "Sicuro di voler elminare il tua account?" }, :method => :delete, class: "btn border-dark btn-lg" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

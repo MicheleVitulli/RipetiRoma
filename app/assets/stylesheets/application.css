@@ -13,3 +13,49 @@
  *= require_tree .
  *= require_self
  */
+
+.serif {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+.navbar-brand .brand:hover {
+  background-color: transparent;
+}
+.h3 {
+  color: darkgreen;
+  font-family: Bodoni, Garamond, Georgia;
+}
+
+.h3:hover,
+a:hover {
+  color: darkred;
+  background-color: transparent;
+}
+.navbar-light {
+  background-color: transparent;
+}
+.navbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+}
+
+.darkR {
+  background-color: darkred;
+  color: white;
+}
+.darkG {
+  background-color: darkgreen;
+  color: white;
+}
+.darkG:hover {
+  background-color: darkgreen;
+  color: wheat;
+}
+.darkR:hover {
+  color: wheat;
+}
+
+#map {
+  height: 100%;
+}
+

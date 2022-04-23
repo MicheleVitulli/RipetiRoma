@@ -1,1 +1,2 @@
-json.partial! "subjects/subject", subject: @subject
+# frozen_string_literal: true
+json.partial! 'subjects/subject', subject: @subject

@@ -1,28 +1,86 @@
-<h1>Controllo risorse del Sito</h1>
-
-
-
-<p><%= link_to "vedi tutte le materie", "/subjects"%></p>
-<p><%= link_to "vedi tutte le users", "/users/index"%></p>
-<p><%= link_to "vedi tutti i corsi", "/courses"%></p>
+<!-- <p><%= link_to "vedi tutte le materie", "/subjects"%></p>
+<p><%= link_to "vedi tutti gli insegnanti", "/users/index"%></p>
+<% if user_signed_in?%>
+  <% if current_user.has_role? :admin or current_user.has_role? :teacher or current_user.has_role? :student%>
+    <p><%= link_to "vedi i tuoi corsi", "/courses"%></p>
+  <% end %>
+<% end %>
 <% if user_signed_in?%>
   <% if current_user.has_role? :admin %>
-<p><%= link_to "vedi tutti i insegnamenti", "/teaches"%></p>
+    <p><%= link_to "vedi tutti i insegnamenti", "/teaches"%></p>
   <% end %>
 <% end %>
 
-
-
 <% if user_signed_in?%>
-<% if current_user.has_role? :admin %>
-  <p>Tu sei un admin</p>
-<% elsif current_user.has_role? :teacher %>
- <p>Tu sei un teacher</p>
- <% elsif current_user.has_role? :student %>
-  <p>Tu sei uno student</p>
-<% else %>
-  <p>tu sei nulla</p>
-<% end %>
-<% else %>
-<p>non sei entrato</p>
-<% end %>
+  <% if current_user.has_role? :admin %>
+    <p>Tu sei un admin</p>
+    <% elsif current_user.has_role? :teacher %>
+      <p>Tu sei un teacher</p>
+      <% elsif current_user.has_role? :student %>
+        <p>Tu sei uno student</p>
+      <% else %>
+        <p>tu sei nulla</p>
+      <% end %>
+    <% else %>
+      <p>Non hai fatto l'accesso</p>
+    <% end %>
+-->
+<!-- Responsive navbar-->
+<!-- Page header with logo and tagline-->
+<header class="py-4  border-bottom mb-1 rounded">
+  <div class="container " >
+    <div class="text-center my-1">
+      <% if !user_signed_in? %>
+        <h1 class="fw-bolder">Benvenuto su RipetiRoma</h1>
+        <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
+          visualizzare l'indice dei nostri insegnanti, altrimenti clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi.</p>
+      <% else %>
+        <h1 class="fw-bolder">Bentornato su RipetiRoma</h1>
+        <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
+          visualizzare l'indice dei nostri insegnanti, clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi oppure 
+          clicca su <strong class="fw-bold">I tuoi corsi</strong> per controllare i tuoi corsi attuali.</p>
+      <% end %>
+    </div>
+  </div>
+</header>
+<!-- Page content-->
+<div class="container">
+  <!-- Nested row for non-featured blog posts-->
+  <div class="row justify-content-center card-deck">
+    <div class="col-lg-3 col-md-3 col-5 m-2">
+      <!-- Insegnanti-->
+      <div class="card text-center border-dark h-100" >
+        <img class="card-img-top p-3" src="<%= asset_path('hat.png')%>" alt="..." />
+        <div class="card-body mx-auto">
+          <%= link_to "Insegnanti", "/users/index", class: "btn btn-dark" %>
+          <p class="card-text mt-2">Scopri chi sono i nostri fantastici professori che ti aiuteranno nelle materie che preferisci.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-5 m-2">
+      <!-- Materie-->
+      <div class="card text-center border-dark h-100" >
+        <img class="card-img-top p-3" src="<%= asset_path('pen.png')%>" alt="..." />
+        <div class="card-body mx-auto">
+          <%= link_to "Materie", "/subjects", class: "btn btn-dark" %>
+          <p class="card-text mt-2">Scopri quali materie puoi ripassare con noi.</p>
+        </div>
+      </div>
+    </div>
+    <% if user_signed_in? %>
+      <% if current_user.has_role? :admin or current_user.has_role? :teacher or current_user.has_role? :student%>
+        <div class="col-lg-3 col-md-3 col-5 m-2 ">
+          <!-- Blog post-->
+          <div class="card text-center border-dark h-100" >
+            <img class="card-img-top p-3" src="<%= asset_path('textbook.png')%>" alt="..." />
+            <div class="card-body mx-auto">
+              <%= link_to "I tuoi corsi", "/courses", class: "btn btn-dark" %>
+              <p class="card-text mt-2">Clicca qui per dare un'occhiata ai tuoi corsi</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<!-- Footer-->

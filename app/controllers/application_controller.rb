@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
   def configure_permitted_parameters
-   devise_parameter_sanitizer.permit(:sign_up, keys: [:ruolo])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[ruolo nome avatar descrizione])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:avatar, :descrizione, :nome, :ruolo, { postals: [] }])
   end
 end

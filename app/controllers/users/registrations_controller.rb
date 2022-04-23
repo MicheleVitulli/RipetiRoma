@@ -1,71 +1,84 @@
 # frozen_string_literal: true
 
-class Users::RegistrationsController < Devise::RegistrationsController
-  # before_action :configure_sign_up_params, only: [:create]
-  # before_action :configure_account_update_params, only: [:update]
-  #after_action :assing_role, only:[:create]
+module Users
+  class RegistrationsController < Devise::RegistrationsController
+    # before_action :configure_sign_up_params, only: [:create]
+    # before_action :configure_account_update_params, only: [:update]
+    # after_action :assing_role, only:[:create]
 
-#  acts_as_user :roles => [:guest, :studente, :insegnante, :admin]
+    #  acts_as_user :roles => [:guest, :studente, :insegnante, :admin]
 
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+    # GET /resource/sign_up
+    # def new
+    #   super
+    # end
 
-  # POST /resource
-  def create
-    super
-      if current_user.has_role(:teacher)
-        current_user.create_teacher(f_name: "",l_name: "",email: self.email, phone: "")
-      elsif current_user.has_role(:student)
-        current_user.create_student(f_name: "",l_name: "",email: self.email, phone: "")
+    # POST /resource
+
+    # GET /resource/edit
+    # def edit
+    #   super
+    # end
+
+    # PUT /resource
+    # def update
+    # super
+    # end
+    # def update_resource(resource, params)
+    #  super
+    #  resource.update_without_password(params)
+    # end
+    def update_resource(resource, params)
+      resource.update_without_password(params)
+
+      case @user.ruolo
+      when 'Insegnante'
+        @user.roles = []
+        @user.add_role(:teacher)
+      when 'Studente'
+        @user.roles = []
+        @user.add_role(:student)
       end
+    end
 
-   end
+    def after_update_path_for(resource)
+      user_path(resource) # Specify the redirect destination path here
+    end
 
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
+    # DELETE /resource
+    # def destroy
+    #   super
+    # end
 
-  # PUT /resource
-  # def update
-  #   super
-  # end
+    # GET /resource/cancel
+    # Forces the session data which is usually expired after sign
+    # in to be expired now. This is useful if the user wants to
+    # cancel oauth signing in/up in the middle of the process,
+    # removing all OAuth session data.
+    # def cancel
+    #   super
+    # end
 
-  # DELETE /resource
-  # def destroy
-  #   super
-  # end
+    # protected
 
-  # GET /resource/cancel
-  # Forces the session data which is usually expired after sign
-  # in to be expired now. This is useful if the user wants to
-  # cancel oauth signing in/up in the middle of the process,
-  # removing all OAuth session data.
-  # def cancel
-  #   super
-  # end
+    # If you have extra params to permit, append them to the sanitizer.
+    # def configure_sign_up_params
+    #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
+    # end
 
-  # protected
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
-  # end
-
-  # If you have extra params to permit, append them to the sanitizer.
-   #def configure_account_update_params
+    # If you have extra params to permit, append them to the sanitizer.
+    # def configure_account_update_params
     #   devise_parameter_sanitizer.permit(:account_update, keys: [:ruolo])
-  # end
+    # end
 
-  # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+    # The path used after sign up.
+    # def after_sign_up_path_for(resource)
+    #   super(resource)
+    # end
 
-  # The path used after sign up for inactive accounts.
-  # def after_inactive_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+    # The path used after sign up for inactive accounts.
+    # def after_inactive_sign_up_path_for(resource)
+    #   super(resource)
+    # end
+  end
 end
