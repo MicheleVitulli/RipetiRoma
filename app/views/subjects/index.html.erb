@@ -37,7 +37,9 @@
       <% if !user_signed_in? or current_user.has_role? :student%>
         <p class="lead mb-0">Ecco le materie che puoi ripassare con noi, clicca su "Insegnanti" per scoprire chi può darti una mano.</p>
       <% elsif current_user.has_role? :teacher%>
-        <p class="lead mb-0">Ecco cosa puoi iniziare a insegnare!</p>
+        <p class="lead mb-0">Per iniziare/smettere di insegnare una materia clicca su Ispeziona!</p>
+      <% elsif current_user.has_role? :admin %>
+        <p class="lead mb-0">Elenco delle materie</p>
       <% end %>
     </div>
   </div>
@@ -47,30 +49,38 @@
   <div class="row justify-content-center card-deck mt-3">
     <% @subjects.each do |subject| %>
       <div class="col-lg-3 col-md-3 col-5 m-2">
-        <div class="card text-center bg-light border-dark h-100" >
-          <h5 class="card-title mt-2"><strong><%= subject.name %></h5>
-          </strong>
-          <div class="card-body mx-auto">
-            <% if not user_signed_in? or current_user.has_role? :student or current_user.has_role? :admin %>
-              <td><%= link_to 'Insegnanti', subject %></td>
-            <% elsif current_user.has_role? :teacher%>
-              <%if current_user.subjects.include? subject%>
-                <td><%= link_to 'Ispeziona (o smetti di insegnare)', subject %></td>
-              <% else %>
-                <td><%= link_to 'Ispeziona (o inizia ad insegnare)', subject %></td>
+        <% if user_signed_in? and current_user.has_role? :teacher%>
+          <% if current_user.subjects.include? subject%>
+            <div class="card text-center bg-light border-3 border-success h-100" >
+            <% else %>
+              <div class="card text-center bg-light border-dark h-100" >
               <% end %>
-            <% end %>
-            <% if user_signed_in? and current_user.has_role? :admin%>
-              <td><%= link_to 'Destroy', subject, method: :delete, data: { confirm: 'Are you sure?' }, class: "text-warning" %></td>
-            <% end %>
+            <% else %>
+              <div class="card text-center bg-light border-dark h-100" >
+              <% end %>
+              <h5 class="card-title mt-2"><strong><%= subject.name %></h5>
+              </strong>
+              <div class="card-body mx-auto">
+                <% if not user_signed_in? or current_user.has_role? :student or current_user.has_role? :admin %>
+                  <td><%= link_to 'Insegnanti', subject %></td>
+                <% elsif current_user.has_role? :teacher%>
+                  <%if current_user.subjects.include? subject%>
+                    <td><%= link_to 'Ispeziona', subject %></td>
+                  <% else %>
+                    <td><%= link_to 'Ispeziona', subject %></td>
+                  <% end %>
+                <% end %>
+                <% if user_signed_in? and current_user.has_role? :admin%>
+                  <td><%= link_to 'Elimina materia', subject, method: :delete, data: { confirm: 'Are you sure?' }, class: "text-warning" %></td>
+                <% end %>
+              </div>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-</div>
-<div class="container text-center mt-5">
-  <% if user_signed_in? and current_user.has_role? :admin %>
-    <h4 class="text-warning"><%= link_to 'Nuova materia', new_subject_path, class: "text-warning"  %></h4>
-  <% end %>
-</div >
+    </div>
+    <div class="container text-center mt-5">
+      <% if user_signed_in? and (current_user.has_role? :admin or current_user.has_role? :teacher) %>
+        <h4 class="text-warning"><%= link_to 'Nuova materia', new_subject_path, class: "text-warning"  %></h4>
+      <% end %>
+    </div >

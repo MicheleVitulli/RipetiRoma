@@ -8,4 +8,11 @@ FactoryBot.define do
   end
   factory(:course) do
   end
+  factory(:review) do
+    testo {"recensione di prova"}
+    valutazione {3}
+  end
+  factory(:message) do
+    testo {"messaggio di prova"}
+  end
 end

@@ -25,7 +25,11 @@
   <div class="container" >
     <div class="text-center my-1">
       <h1 class="fw-bolder"><%= @subject.name %></h1>
-      <p class="lead mb-0">Puoi ripassare questa materia con i seguenti insegnanti, per iniziare un corso con uno di loro, clicca sul nome e poi manda un messaggio!</p>
+      <% if user_signed_in? and current_user.has_role? :student %>
+        <p class="lead mb-0">Puoi ripassare questa materia con i seguenti insegnanti, per iniziare un corso con uno di loro, clicca sul nome e poi manda un messaggio!</p>
+      <% else %>
+        <p class="lead mb-0">Questi sono gli attuali insegnanti di questa materia</p>
+      <% end %>
     </div>
   </div>
 </header>

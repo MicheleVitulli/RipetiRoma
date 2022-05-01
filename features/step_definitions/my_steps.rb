@@ -33,7 +33,7 @@ Given('I am Student') do
 end
 
 Given('a random {string} Teacher') do |string|
-  user = User.create!(email: 'insegnante@uno.it', password: 'insegnante', nome: string,
+  user = User.create!(email: string+"@.it", password: 'insegnante', nome: string,
                       ruolo: 'Insegnante', descrizione: 'Ciao sono Roberto')
   user.add_role :teacher
 end
@@ -48,10 +48,9 @@ Given('I am Teacher {string} that teaches {string}') do |string, string2|
   fill_in 'Password',	with: 'insegnante'
   click_button 'Entra'
   expect(page).to have_text('Insegnante')
-  user.add_role :teacher
 end
 Given('a random {string} Student') do |string|
-  user = User.create!(email: 'studente@due.it', password: 'studente', nome: string,
+  user = User.create!(email: string+'@due.it', password: 'studente', nome: string,
                       ruolo: 'Studente')
   user.add_role :teacher
 end
@@ -60,6 +59,21 @@ Given('a random {string} Teacher with {string} CAP') do |string, string2|
                       ruolo: 'Insegnante', descrizione: 'Ciao sono Roberto')
   user.add_role :teacher
   user.postals.push(string2)
+end
+Given('a random {string} Teacher that teaches {string}') do |string, string2|
+  user = User.create!(email: string+'@uno.it', password: 'insegnante', nome: string,
+    ruolo: 'Insegnante', descrizione: 'Ciao sono Roberto')
+  subj = Subject.create(name: string2)
+  user.add_role :teacher
+  user.subjects.push(subj)
+end
+Given('a random course of {string} to {string} in {string}') do |string, string2, string3|
+  teacher = User.find_by_nome(string)
+  student = User.find_by_nome(string2)
+  subj = Subject.find_by_name(string3)
+  course = Course.create(teacher: teacher, student: student, subject: subj)
+  res = teacher.students.include? student
+  expect(res).to eq(true)  
 end
 
 Given('I am on home page') do
@@ -100,7 +114,14 @@ end
 
 Then('I should be on {string} index path') do |string|
   current_path = URI.parse(current_url).path
-  expect(current_path).to eq("/#{string}")
+  ris = false
+  if current_path == "/#{string}"
+    ris = true
+  end
+  if current_path = "/#{string}/index"
+    ris = true
+  end
+  expect(ris).to eq(true)
 end
 Then('I should be on {string} new path') do |string|
   current_path = URI.parse(current_url).path
@@ -141,6 +162,23 @@ Then('{string} should have a new course with {string} of {string}') do |string, 
   io = User.find_by_nome(string)
   corso = Course.find_by_teacher_id(io)
   student = User.find_by_nome(string2)
+  subj = Subject.find_by_name(string3)
   res = io.students.include? student
-  expect(res).to eq(true) and expect(corso.subject.name).to eq(string3)
+  if corso.subject != subj
+    res = false
+  end  
+  expect(res).to eq(true)
+end
+
+Then('{string} should not have a course with {string} of {string}') do |string, string2, string3|
+  io = User.find_by_nome(string)
+  corso = Course.find_by_teacher_id(io)
+  student = User.find_by_nome(string2)
+  res = io.students.include? student
+  expect(res).to eq(false)
+end
+
+Then('{string} in not an user') do |string|
+  ris = User.find_by_nome(string)
+  expect(ris).to eq(nil)
 end

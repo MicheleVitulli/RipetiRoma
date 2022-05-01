@@ -1,41 +1,42 @@
-<p id="notice"><%= notice %></p>
-<header class="py-4 border-bottom mb-1 rounded">
-  <div class="container" >
-    <div class="text-center my-1">
-      <h1 class="fw-bolder">I tuoi corsi</h1>
-      <% if current_user.has_role? :teacher %>
-        <p class="lead mb-0"> Qui puoi vedere i tuoi studenti e in che materia li stai aiutando.</p>
-      <% else %>
-        <p class="lead mb-0"> Qui puoi vedere i tuoi insegnanti e la materia che ripassi con loro.</p>
-      <% end %>
-      <p class="lead mb-0"></p>
+<% if current_user.has_role? :teacher%>
+  <p id="notice"><%= notice %></p>
+  <header class="py-4 border-bottom mb-1 rounded">
+    <div class="container" >
+      <div class="text-center my-1">
+        <h1 class="fw-bolder">I tuoi corsi</h1>
+        <% if current_user.has_role? :teacher %>
+          <p class="lead mb-0"> Qui puoi vedere i tuoi studenti e in che materia li stai aiutando.</p>
+        <% else %>
+          <p class="lead mb-0"> Qui puoi vedere i tuoi insegnanti e la materia che ripassi con loro.</p>
+        <% end %>
+        <p class="lead mb-0"></p>
+      </div>
     </div>
-  </div>
-</header>
-<div class="container">
-  <div class="row justify-content-center card-deck mt-3">
-    <% @courses.each do |course| %>
-      <% if current_user.has_role? :admin or (current_user.has_role? :teacher and course.teacher == current_user ) or (current_user.has_role? :student and course.student == current_user )%>
-        <div class="col-lg-3 col-md-3 col-5 m-2">
-          <div class="card text-center bg-light border-dark " >
-            <h5 class="card-header mt-2">
-              <% if current_user.has_role? :teacher %>
-                <%=link_to course.student.nome, course.student%>
-              <% else %>
-                <%= link_to course.teacher.nome, course.teacher %>
-              <% end %>
-            </h5>
-            <div class="card-body ">
-              <% if course.subject!= nil %>
-                <h3 class="card-title text-center">
-                  <%=course.subject.name%>
-                </h3>
-                <h6 class="card-body text-center">
-                  <%=course.day%>
-                </h6>
-                <% if course.day == nil%>
-                  <%= form_with(model: course, course: course) do |form| %>
-                    <%= form.select :day, options_for_select([
+  </header>
+  <div class="container">
+    <div class="row justify-content-center card-deck mt-3">
+      <% @courses.each do |course| %>
+        <% if current_user.has_role? :admin or (current_user.has_role? :teacher and course.teacher == current_user ) or (current_user.has_role? :student and course.student == current_user )%>
+          <div class="col-lg-3 col-md-3 col-5 m-2">
+            <div class="card text-center bg-light border-dark " >
+              <h5 class="card-header mt-2">
+                <% if current_user.has_role? :teacher %>
+                  <%=link_to course.student.nome, course.student%>
+                <% else %>
+                  <%= link_to course.teacher.nome, course.teacher %>
+                <% end %>
+              </h5>
+              <div class="card-body ">
+                <% if course.subject!= nil %>
+                  <h3 class="card-title text-center">
+                    <%=course.subject.name%>
+                  </h3>
+                  <h6 class="card-body text-center">
+                    <%=course.day%>
+                  </h6>
+                  <% if course.day == nil%>
+                    <%= form_with(model: course, course: course) do |form| %>
+                      <%= form.select :day, options_for_select([
   ["Seleziona il giorno", ""], 
   'Lunedì', 
   'Martedì', 
@@ -44,54 +45,98 @@
   'Sabato',
   'Domenica']), 
   {}, { class: "form-select pt-2 mt-0", onchange: 'this.form.submit();' } %>
-                  <%end%>
-            <% end %>
-          <% else %>
-            <p class="card-text text-danger"> Seleziona la materia del nuovo corso </p>
-            <ul>
-              <% current_user.subjects.each do |materia| %>
-                <li><%= link_to materia.name, aggiungi_materia_subject_path(course.id, materia.id) %></li>
-              <% end %>
-            </ul>
-          <% end %>
-          <% if current_user.has_role? :teacher %>
-            <div class="card-footer text-muted">
-              <%= link_to 'Elimina', course, method: :delete, data: { confirm: 'Are you sure?' } %>
+                    <%end%>
+                  <% end %>
+                <% else %>
+                  <p class="card-text text-danger"> Seleziona la materia del nuovo corso </p>
+                  <ul>
+                    <% current_user.subjects.each do |materia| %>
+                      <li><%= link_to materia.name, aggiungi_materia_subject_path(course.id, materia.id) %></li>
+                    <% end %>
+                  </ul>
+                <% end %>
+                <% if current_user.has_role? :teacher %>
+                  <div class="card-footer text-muted">
+                    <%= link_to 'Elimina', course, method: :delete, data: { confirm: 'Are you sure?' } %>
+                  </div>
+                <% end %>
+              </div>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <% if current_user.has_role? :teacher %>
+  <% end %>
+  <%= week_calendar(number_of_weeks: 1) do |date| %>
+    <ul>
+      <% @courses.each do |course|%>
+        <% if course.teacher == current_user%>
+          <% if course.day == 'Lunedì' and date.cwday == 1%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Martedì' and date.cwday == 2%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Giovedì' and date.cwday == 4%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Venerdì' and date.cwday == 5%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Sabato' and date.cwday == 6%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Domenica' and date.cwday == 7%>
+            <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
+          <%end %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="container text-center">
+    <%= link_to 'Nuovo Corso', new_course_path, class: 'text-center' %>
+  </div>
+<% elsif current_user.has_role? :student %>
+  <header class="py-4 border-bottom mb-1 rounded">
+    <div class="container" >
+      <div class="text-center my-1">
+        <h1 class="fw-bolder">I tuoi corsi</h1>
+        <p class="lead mb-0"> Qui puoi vedere i tuoi insegnanti e la materia che ripassi con loro.</p>
+        <p class="lead mb-0"></p>
       </div>
     </div>
-  <% end %>
-<% end %>
-</div>
-</div>
-<br>
-<% if current_user.has_role? :teacher %>
-<% end %>
-<%= week_calendar(number_of_weeks: 1) do |date| %>
-  <ul>
-    <% @courses.each do |course|%>
-      <% if course.teacher == current_user%>
-        <% if course.day == 'Lunedì' and date.cwday == 1%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Martedì' and date.cwday == 2%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Giovedì' and date.cwday == 4%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Venerdì' and date.cwday == 5%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Sabato' and date.cwday == 6%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <% elsif course.day == 'Domenica' and date.cwday == 7%>
-          <li><%= course.student.nome + " ("+course.subject.name+") "%></li>
-        <%end %>
+  </header>
+  <%= week_calendar(number_of_weeks: 1) do |date| %>
+    <ul>
+      <% @courses.each do |course|%>
+        <% if course.student == current_user%>
+          <% if course.day == 'Lunedì' and date.cwday == 1%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Martedì' and date.cwday == 2%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Giovedì' and date.cwday == 4%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Venerdì' and date.cwday == 5%>
+            <li><%= course.teacehr.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Sabato' and date.cwday == 6%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <% elsif course.day == 'Domenica' and date.cwday == 7%>
+            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+          <%end %>
+        <% end %>
       <% end %>
+    </ul>
+  <% end %>
+<% else %>
+<h1>Lista di tutti i corsi presenti </h1>
+  <ul>
+    <% @courses.each do |corso|%>
+      <li>
+        <span class="text-danger"><%= link_to corso.teacher.nome, corso.teacher %></span> insegna a <span class="text-danger"><%= link_to corso.student.nome, corso.student%></span> la materia <span class="text-danger"><%= link_to corso.subject.name, corso.subject%></span> il <span class=""><%= corso.day%></span>
+        <%= link_to 'Elimina corso', corso, method: :delete, data: { confirm: 'Sei sicuro?' }, class: "text-warning" %></td>
+      </li>
     <% end %>
   </ul>
 <% end %>
-<div class="container text-center">
-  <%= link_to 'Nuovo Corso', new_course_path, class: 'text-center' %>
-</div>

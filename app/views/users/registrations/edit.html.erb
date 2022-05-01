@@ -51,6 +51,7 @@
 <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
 <%= link_to "Back", :back %>
 -->
+<p id="notice"><%= notice %></p>
 <section class="vh-100">
   <div class="container-fluid h-custom">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -70,7 +71,7 @@
           <div class="form-outline mb-2">
             <%= f.email_field :email, autofocus: true, autocomplete: "new-email", class: "form-control form-control-lg", placeholder: "Email" %>
           </div>
-          <% if (!current_user.has_role? :student and !current_user.has_role? :teacher) or current_user.has_role? :teacher%>
+          <% if (!@user.has_role? :student and !@user.has_role? :teacher) or @user.has_role? :teacher%>
             <div class="form-outline mb-2 text-center">
               <label  class="form-label">Inserisci le tue zone preferite, tramite CAP</label>
               <input name="user[postals][]" type="text", value="<%= @user.postals[0] if @user.postals %>" class="m-1"/>
@@ -124,8 +125,9 @@
           <p class="text-center fw-bold mx-3 mb-0">Eliminazione Account</p>
         </div>
         <div class="text-center text-lg-center mt-0 pt-2">
-          <%= link_to 'Elimina', current_user, data: { confirm: "Sicuro di voler elminare il tua account?" }, :method => :delete, class: "btn border-dark btn-lg" %>
+          <%= link_to 'Elimina', current_user, data: { confirm: "Sicuro di voler elminare il tuo account?" }, :method => :delete, class: "btn border-dark btn-lg" %>
         </div>
+        
       </div>
     </div>
   </div>

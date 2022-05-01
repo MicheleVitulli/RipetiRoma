@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
          :omniauthable, omniauth_providers: %i[facebook google_oauth2]
 
   after_create :assign_default_role
-  has_many :teaches
+  has_many :teaches, dependent: :destroy
   has_many :subjects, through: :teaches
 
   has_many :courses
@@ -28,14 +28,13 @@ class User < ActiveRecord::Base
 
   has_many :students, through: :teachers
 
-  #######
-  has_many :reviews
+  has_many :reviews, dependent: :destroy
 
   has_many :reviewed,
            class_name: 'Review',
            foreign_key: :reviewer_id
-  ######
-  has_many :messages
+
+  has_many :messages, dependent: :destroy
 
   has_many :messaged,
            class_name: 'Message',
@@ -79,6 +78,24 @@ class User < ActiveRecord::Base
       user.nome = auth.info.name 
     end
   end
+
+  def media
+    ris = 0
+    num = 0
+    self.reviews.each do |rev|
+      num = num +1
+      temp = rev.valutazione.to_i
+      ris = ris + temp
+    end 
+    if num > 0
+      ret = ris/num
+    else
+      ret = nil
+    end 
+    return ret
+  end 
+
+
 
   attr_accessor :current_password
 end
