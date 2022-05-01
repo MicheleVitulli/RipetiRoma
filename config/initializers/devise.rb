@@ -311,5 +311,5 @@ Devise.setup do |config|
 
   # Facebook login
   config.omniauth :google_oauth2, '164968394474-bdj03h12ifsagcih8u5vn3fg40bd9pfb.apps.googleusercontent.com',
-                  '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'
+                  'APIKEY'
 end
