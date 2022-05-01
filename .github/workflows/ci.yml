@@ -15,8 +15,9 @@ jobs:
           ruby-version: '3.0.1'
       - name: Install dependencies
         run: bundle install
-      - name: Run tests
+      - name: Run tests cucumber
         run: cucumber
+      - name: Run test rspec
         run: rspec
       - name: Rubocop
         run: rubocop
