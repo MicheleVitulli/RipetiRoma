@@ -30,15 +30,17 @@
 <header class="py-4  border-bottom mb-1 rounded">
   <div class="container " >
     <div class="text-center my-1">
-      <% if !user_signed_in? %>
+      <% if !user_signed_in?%>
         <h1 class="fw-bolder">Benvenuto su RipetiRoma</h1>
         <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
           visualizzare l'indice dei nostri insegnanti, altrimenti clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi.</p>
-      <% else %>
+      <% elsif !current_user.has_role? :admin %>
         <h1 class="fw-bolder">Bentornato su RipetiRoma</h1>
         <p class="lead mb-0">Nell'homepage puoi navigare verso i nostri contenuti. Clicca su <strong class="fw-bold">Insegnanti</strong> per 
           visualizzare l'indice dei nostri insegnanti, clicca su <strong class="fw-bold">Materie</strong> per visualizzare l'elenco delle materie che puoi ripassare con noi oppure 
           clicca su <strong class="fw-bold">I tuoi corsi</strong> per controllare i tuoi corsi attuali.</p>
+      <% else %>
+        <h1 class="fw-bolder">Bentornato <span class="text-warning">ADMIN</span></h1>
       <% end %>
     </div>
   </div>
@@ -52,8 +54,12 @@
       <div class="card text-center border-dark h-100" >
         <img class="card-img-top p-3" src="<%= asset_path('hat.png')%>" alt="..." />
         <div class="card-body mx-auto">
-          <%= link_to "Insegnanti", "/users/index", class: "btn btn-dark" %>
-          <p class="card-text mt-2">Scopri chi sono i nostri fantastici professori che ti aiuteranno nelle materie che preferisci.</p>
+          <% if !user_signed_in? or (user_signed_in? and !current_user.has_role? :admin) %>
+            <%= link_to "Insegnanti", "/users/index", class: "btn btn-dark" %>
+            <p class="card-text mt-2">Scopri chi sono i nostri fantastici professori che ti aiuteranno nelle materie che preferisci.</p>
+          <% else %>
+            <%= link_to "Elenco insegnanti e studenti", "/users/index", class: "btn btn-warning" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -62,8 +68,12 @@
       <div class="card text-center border-dark h-100" >
         <img class="card-img-top p-3" src="<%= asset_path('pen.png')%>" alt="..." />
         <div class="card-body mx-auto">
-          <%= link_to "Materie", "/subjects", class: "btn btn-dark" %>
-          <p class="card-text mt-2">Scopri quali materie puoi ripassare con noi.</p>
+          <% if !user_signed_in? or (user_signed_in? and !current_user.has_role? :admin) %>
+            <%= link_to "Materie", "/subjects", class: "btn btn-dark" %>
+            <p class="card-text mt-2">Scopri quali materie puoi ripassare con noi.</p>
+          <% else %>
+            <%= link_to "Materie", "/subjects", class: "btn btn-warning" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -74,8 +84,12 @@
           <div class="card text-center border-dark h-100" >
             <img class="card-img-top p-3" src="<%= asset_path('textbook.png')%>" alt="..." />
             <div class="card-body mx-auto">
+            <% if !current_user.has_role? :admin %>
               <%= link_to "I tuoi corsi", "/courses", class: "btn btn-dark" %>
               <p class="card-text mt-2">Clicca qui per dare un'occhiata ai tuoi corsi</p>
+              <% else %>
+            <%= link_to "Corsi", "/courses",  class: "btn btn-warning" %>
+          <% end %>
             </div>
           </div>
         </div>

@@ -211,7 +211,13 @@
             <% if messaggio.messanger != nil %>
               <li class="list-group-item d-flex justify-content-between align-items-start">
                 <div class="ms-2 me-auto">
-                  <div class="fw-bold"><%= messaggio.messanger.nome%></div>
+                  <div class="fw-bold">
+                    <% if messaggio.messanger.has_role? :admin %>
+                      <span class="text-warning">ADMIN</span>
+                    <% else%>
+                      <%= messaggio.messanger.nome%>
+                    <% end %>
+                  </div>
                   <%= messaggio.testo %>
                 </div>
                 <span class="badge  rounded-pill"><%= link_to 'Rispondi' , messaggio.messanger, class: "text-secondary" %></span>
@@ -225,12 +231,16 @@
     </div>
   <% end %>
   <div class="text-center">
-  <%= link_to 'Modifica il tuo profilo', edit_registration_path(current_user), class: "text-center" %>
+    <%= link_to 'Modifica il tuo profilo', edit_registration_path(current_user), class: "text-center" %>
   </div>
 <% end %>
 <% else %>
   <div class="px-4 pt-3 pb-2 mt-2 mb-0 text-center">
-    <h1 class="display-5 fw-bold"><%= @user.nome%></h1>
+    <% if current_user.has_role? :admin and current_user == @user %>
+      <h1 class="display-5 fw-bold text-warning">ADMIN</h1>
+    <% else %>
+      <h1 class="display-5 fw-bold"><%= @user.nome%></h1>
+    <% end %>
   </div>
   <% if current_user == @user %>
     <% if !@user.messages.empty? %>
@@ -283,7 +293,13 @@
   <% end %>
 <% end %>
 <% if user_signed_in? and !current_user.has_role? :teacher and !current_user.has_role? :admin and !current_user.has_role? :admin%>
-<div class="text-center">
-  <%= link_to 'Modifica il tuo profilo', edit_registration_path(current_user), class: "text-center" %>
+  <div class="text-center">
+    <%= link_to 'Modifica il tuo profilo', edit_registration_path(@user), class: "text-center" %>
+  </div>
+<% end %>
+<% if user_signed_in? and current_user.has_role? :admin and !@user.has_role? :admin%>
+  <div class="text-center text-lg-center mt-0 pt-2">
+  
+    <%= link_to 'Elimina account di questo utente', @user, data: { confirm: "Sicuro di voler elminare l'account di questo utente?" }, :method => :delete, class: " mt-4 btn btn-warning" %>
   </div>
 <% end %>

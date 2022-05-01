@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pry'
 
 class SubjectsController < ApplicationController
@@ -8,7 +9,7 @@ class SubjectsController < ApplicationController
   def aggiungi_materia
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
-    #binding.pry
+    # binding.pry
     @corso.subject = @materia
     redirect_to '/courses' if @corso.save
   end

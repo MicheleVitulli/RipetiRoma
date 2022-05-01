@@ -1,4 +1,4 @@
-Feature: A teacher can see his profile, and other teachers profile but can not leave a reviews, he can send messages, and he can start a new course.
+Feature: Teacher features
 
 Scenario: View My Profile
     Given I am Teacher 'Michele'
@@ -23,13 +23,13 @@ Scenario: Sending a message
     When I press 'Invia messaggio'
     Then I expect 'Domenico' to have a "Ciao, come stai?" message
 
-Scenario: I can start a new course with a student (studente@due.it)
+Scenario: I can start a new course with a student 
     Given I am Teacher 'Michele' that teaches 'Latino'
     Given a random 'Domenico' Student
     When I follow 'I tuoi corsi'
     Then I should be on 'courses' index path
     When I follow 'Nuovo Corso'
-    And I fill in "search" with "studente@due.it"
+    And I fill in "search" with "domenico@due.it"
     And I press "Cerca"
     Then I should see 'Inizia un corso'
     When I follow 'Inizia un corso'
@@ -37,4 +37,20 @@ Scenario: I can start a new course with a student (studente@due.it)
     And I should see 'Latino'
     When I follow 'Latino'
     Then 'Michele' should have a new course with 'Domenico' of 'Latino'
+
+Scenario: I can delete one of my courses
+    Given I am Teacher 'Michele' that teaches 'Latino'
+    Given a random 'Domenico' Student
+    When I follow 'I tuoi corsi'
+    When I follow 'Nuovo Corso'
+    And I fill in "search" with "domenico@due.it"
+    And I press "Cerca"
+    When I follow 'Inizia un corso'
+    When I follow 'Latino'
+    Then 'Michele' should have a new course with 'Domenico' of 'Latino'
+    And I should be on 'courses' index path
+    Then I should see "Elimina"
+    When I follow "Elimina"
+    Then I should not see 'Domenico'
+    And 'Michele' should not have a course with 'Domenico' of 'Latino'
 

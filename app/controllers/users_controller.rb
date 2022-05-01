@@ -45,6 +45,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
+    @user.courses.destroy
     @user.destroy
     redirect_to '/'
   end

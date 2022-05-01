@@ -18,8 +18,8 @@
       <div class="container-fluid">
         <% if user_signed_in? %>
           <div class="navbar-brand mr-2">
-            <p style="display:inline"><% if current_user.nome != "" %> <%=link_to "Il tuo profilo", current_user%></p>
-
+            <p style="display:inline"><% if current_user.nome != "" %> <% if current_user.has_role? :admin%><%=link_to "Messaggi ricevuti", current_user%> <% else %><%=link_to "Il tuo profilo", current_user%><% end %></p>
+ </br>
             <% if current_user.has_role? :admin%>
               <p style="display:inline">Admin</p>
             <% else %>
