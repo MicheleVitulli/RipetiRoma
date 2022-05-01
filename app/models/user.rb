@@ -75,27 +75,20 @@ class User < ActiveRecord::Base
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
-      user.nome = auth.info.name 
+      user.nome = auth.info.name
     end
   end
 
   def media
     ris = 0
     num = 0
-    self.reviews.each do |rev|
-      num = num +1
+    reviews.each do |rev|
+      num += 1
       temp = rev.valutazione.to_i
-      ris = ris + temp
-    end 
-    if num > 0
-      ret = ris/num
-    else
-      ret = nil
-    end 
-    return ret
-  end 
-
-
+      ris += temp
+    end
+    (ris / num if num > 0)
+  end
 
   attr_accessor :current_password
 end
