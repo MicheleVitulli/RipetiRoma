@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
   end
 
   def assign_default_role
-    if email == 'michele.vitulli@outlook.it'
+    if email == 'michele.vitulli@outlook.it' # modificare questo campo con la mail identificativa dell'admin
       add_role(:admin)
     elsif ruolo == 'Insegnante'
       add_role(:teacher)
@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
       temp = rev.valutazione.to_i
       ris += temp
     end
-    (ris / num if num > 0)
+    (ris / num if num.positive?)
   end
 
   attr_accessor :current_password

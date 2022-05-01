@@ -33,7 +33,7 @@ Given('I am Student') do
 end
 
 Given('a random {string} Teacher') do |string|
-  user = User.create!(email: string + '@.it', password: 'insegnante', nome: string,
+  user = User.create!(email: "#{string}@.it", password: 'insegnante', nome: string,
                       ruolo: 'Insegnante', descrizione: 'Ciao sono Roberto')
   user.add_role :teacher
 end
@@ -50,7 +50,7 @@ Given('I am Teacher {string} that teaches {string}') do |string, string2|
   expect(page).to have_text('Insegnante')
 end
 Given('a random {string} Student') do |string|
-  user = User.create!(email: string + '@due.it', password: 'studente', nome: string,
+  user = User.create!(email: "#{string}@due.it", password: 'studente', nome: string,
                       ruolo: 'Studente')
   user.add_role :teacher
 end
@@ -61,7 +61,7 @@ Given('a random {string} Teacher with {string} CAP') do |string, string2|
   user.postals.push(string2)
 end
 Given('a random {string} Teacher that teaches {string}') do |string, string2|
-  user = User.create!(email: string + '@uno.it', password: 'insegnante', nome: string,
+  user = User.create!(email: "#{string}@uno.it", password: 'insegnante', nome: string,
                       ruolo: 'Insegnante', descrizione: 'Ciao sono Roberto')
   subj = Subject.create(name: string2)
   user.add_role :teacher
