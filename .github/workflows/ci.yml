@@ -22,4 +22,4 @@ jobs:
       - name: Run test rspec
         run: rspec
       - name: Rubocop
-        run: rubocop
+        run: rubocop -a
