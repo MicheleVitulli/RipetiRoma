@@ -36,13 +36,13 @@ class SubjectsController < ApplicationController
     @subject = Subject.new(subject_params)
     respond_to do |format|
       if @subject.save
-        flash[:success] = "Nuova materia creata correttamente"
-        format.html { redirect_to subjects_url}
+        flash[:success] = 'Nuova materia creata correttamente'
+        format.html { redirect_to subjects_url }
         format.json { render :index, status: :created, location: @subject }
       else
-        
+
         format.html { render :new }
-        
+
       end
     end
   end
@@ -71,7 +71,7 @@ class SubjectsController < ApplicationController
     end
     @subject.destroy
     respond_to do |format|
-      flash[:warning] = "Materia eliminata correttamente"
+      flash[:warning] = 'Materia eliminata correttamente'
       format.html { redirect_to subjects_url }
       format.json { head :no_content }
     end

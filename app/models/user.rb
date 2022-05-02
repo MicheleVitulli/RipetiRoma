@@ -91,11 +91,8 @@ class User < ActiveRecord::Base
       ris += temp
     end
     tot = nil
-    if num > 0
-      tot = (ris/num.to_f).ceil(1)
-    end
-    return tot
-    
+    tot = (ris / num.to_f).ceil(1) if num > 0
+    tot
   end
 
   attr_accessor :current_password

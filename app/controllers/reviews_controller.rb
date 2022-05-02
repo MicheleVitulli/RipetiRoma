@@ -17,8 +17,8 @@ class ReviewsController < ApplicationController
     @recensito = User.find(params[:user_id])
     @review = @recensito.reviews.create(review_params)
     if @review.save
-      flash[:success] = "Nuova recensione aggiunta"
-      redirect_to user_path(@recensito) 
+      flash[:success] = 'Nuova recensione aggiunta'
+      redirect_to user_path(@recensito)
     end
   end
 
@@ -38,7 +38,7 @@ class ReviewsController < ApplicationController
   # DELETE /reviews/1 or /reviews/1.json
   def destroy
     @review.destroy
-    flash[:warning] = "Recensione eliminata"
+    flash[:warning] = 'Recensione eliminata'
     redirect_to request.referrer
   end
 
