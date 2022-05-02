@@ -5,6 +5,7 @@ FactoryBot.define do
     email { 'prova@uno.it' }
     password { 'password' }
     nome { 'Michele' }
+    ruolo {'test'}
   end
   factory(:course) do
   end

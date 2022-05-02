@@ -2,7 +2,7 @@
 
 ##################### Given commands
 Given('I am Admin') do
-  user = User.create!(email: 'michele.vitulli@outlook.it', password: 'michele', nome: 'Michele')
+  user = User.create!(email: 'michele.vitulli@outlook.it', password: 'michele', nome: 'Michele', ruolo: 'Admin')
   user.add_role :admin
   visit '/users/sign_in'
   fill_in 'Email',	with: 'michele.vitulli@outlook.it'
