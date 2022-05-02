@@ -16,9 +16,10 @@ class ReviewsController < ApplicationController
   def create
     @recensito = User.find(params[:user_id])
     @review = @recensito.reviews.create(review_params)
-    # redirect_to user_path(@recensito)
-    # render :text => params[:review_params][:testo]
-    redirect_to user_path(@recensito) if @review.save
+    if @review.save
+      flash[:success] = "Nuova recensione aggiunta"
+      redirect_to user_path(@recensito) 
+    end
   end
 
   # PATCH/PUT /reviews/1 or /reviews/1.json
@@ -37,6 +38,7 @@ class ReviewsController < ApplicationController
   # DELETE /reviews/1 or /reviews/1.json
   def destroy
     @review.destroy
+    flash[:warning] = "Recensione eliminata"
     redirect_to request.referrer
   end
 

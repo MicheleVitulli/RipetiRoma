@@ -18,14 +18,12 @@ class UsersController < ApplicationController
   def insegna_materia
     @materia = Subject.find(params[:id])
     current_user.subjects << @materia
-    # @teach = Teach.new(user_id: current_user.id, subject_id: @materia.id )
     redirect_to '/subjects'
   end
 
   def noninsegna_materia
     @materia = Subject.find(params[:id])
     current_user.subjects.delete(@materia)
-    # @teach = Teach.new(user_id: current_user.id, subject_id: @materia.id )
     redirect_to '/subjects'
   end
 

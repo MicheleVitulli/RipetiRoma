@@ -41,7 +41,8 @@
   'Lunedì', 
   'Martedì', 
   'Mercoledì', 
-  'Giovedì', 
+  'Giovedì',
+  'Venerdì', 
   'Sabato',
   'Domenica']), 
   {}, { class: "form-select pt-2 mt-0", onchange: 'this.form.submit();' } %>
@@ -111,32 +112,35 @@
       <% @courses.each do |course|%>
         <% if course.student == current_user%>
           <% if course.day == 'Lunedì' and date.cwday == 1%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%=link_to course.teacher.nome, course.teacher %> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Martedì' and date.cwday == 2%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher%> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Mercoledì' and date.cwday == 3%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher%> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Giovedì' and date.cwday == 4%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher%> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Venerdì' and date.cwday == 5%>
-            <li><%= course.teacehr.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher%> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Sabato' and date.cwday == 6%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher%> (<%= (course.subject.name) %>)</li>
           <% elsif course.day == 'Domenica' and date.cwday == 7%>
-            <li><%= course.teacher.nome + " ("+course.subject.name+") "%></li>
+            <li><%= link_to course.teacher.nome, course.teacher %> (<%= (course.subject.name) %>)</li>
           <%end %>
         <% end %>
       <% end %>
     </ul>
   <% end %>
 <% else %>
-<h1>Lista di tutti i corsi presenti </h1>
+  <h1>Lista di tutti i corsi presenti </h1>
   <ul>
     <% @courses.each do |corso|%>
-      <li>
-        <span class="text-danger"><%= link_to corso.teacher.nome, corso.teacher %></span> insegna a <span class="text-danger"><%= link_to corso.student.nome, corso.student%></span> la materia <span class="text-danger"><%= link_to corso.subject.name, corso.subject%></span> il <span class=""><%= corso.day%></span>
-        <%= link_to 'Elimina corso', corso, method: :delete, data: { confirm: 'Sei sicuro?' }, class: "text-warning" %></td>
+      <% if corso.teacher != nil and corso.student != nil%>
+        <li>
+          <span class="text-danger"><%= link_to corso.teacher.nome, corso.teacher %></span> insegna a <span class="text-danger"><%= link_to corso.student.nome, corso.student%></span> la materia <span class="text-danger">
+            <% if corso.subject != nil%> <%= link_to corso.subject.name, corso.subject%><% end %></span> il <span class=""><%= corso.day%></span>
+  
       </li>
     <% end %>
-  </ul>
+  <% end %>
+</ul>
 <% end %>

@@ -23,7 +23,7 @@
   loading="lazy"
   
   referrerpolicy="no-referrer-when-downgrade"
-  src="https://www.google.com/maps/embed/v1/place?key=APIKEY
+  src="https://www.google.com/maps/embed/v1/place?key=<%= ENV['API_KEYM'] %>
     &q=<%= @cap %>
     &zoom=12">
     </iframe>
@@ -53,6 +53,13 @@
                   </ul>
                 <% end %>
               </div>
+            </div>
+            <div class="card-footer text-center">
+              <% if utente.media != nil %>
+                Valutazione media: <%= utente.media %>
+              <% else %>
+                Nessuna recensione
+              <% end %>
             </div>
           </div>
         </div>
@@ -85,7 +92,7 @@
             </div>
             <div class="card-footer text-center">
               <% if utente.media != nil %>
-                Media voto di <%= utente.media %>
+                Valutazione media: <%= utente.media %>
               <% else %>
                 Nessuna recensione
               <% end %>
@@ -96,7 +103,7 @@
     <% end %>
   <% end %>
 </div>
-<% if current_user.has_role? :admin%>
+<% if user_signed_in? and current_user.has_role? :admin%>
   <div class= 'm-4 text-center'>
   <h1 class="display-5 fw-bold">Elenco degli studenti </h1>
     <ul class="list-group list-group-flush">

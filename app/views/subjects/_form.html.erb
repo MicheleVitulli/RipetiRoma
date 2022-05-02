@@ -1,13 +1,16 @@
 <%= form_with(model: subject) do |form| %>
   <% if subject.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(subject.errors.count, "error") %> prohibited this subject from being saved:</h2>
-      <ul>
-        <% subject.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <div class="row">
+      <div class="col-6">
+        
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong> Nome già in uso</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+          </div>
+        
+      </div>
+    </div >
   <% end %>
   <div class="field">
     <%= form.label  :name, value: "Nome"%>

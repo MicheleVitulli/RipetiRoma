@@ -6,14 +6,16 @@ class MessagesController < ApplicationController
   def create
     @messaged = User.find(params[:user_id])
     @message = @messaged.messages.create(message_params)
-    # redirect_to user_path(@recensito)
-    # render :text => params[:review_params][:testo]
-    redirect_to user_path(@messaged) if @message.save
+    if @message.save
+    flash[:success] = "Messaggio inviato"
+    redirect_to user_path(@messaged)
+    end
   end
 
   def destroy
     @message = Message.find(params[:id])
     @message.destroy
+    flash[:warning] = "Messaggio eliminato"
     redirect_to request.referrer
   end
 

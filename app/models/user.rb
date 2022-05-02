@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  validates :email, uniqueness: true, on: :create
+  validates :nome, presence: true, on: :create
+  validates :ruolo, presence: true, on: :create
   rolify
   serialize :postals, Array
   devise :database_authenticatable, :registerable,
@@ -30,15 +31,17 @@ class User < ActiveRecord::Base
 
   has_many :reviews, dependent: :destroy
 
-  has_many :reviewed,
+  has_many :reviewers,
            class_name: 'Review',
            foreign_key: :reviewer_id
+  has_many :reviewers, through: :reviews
 
   has_many :messages, dependent: :destroy
 
-  has_many :messaged,
+  has_many :messangers,
            class_name: 'Message',
            foreign_key: :messanger_id
+  has_many :messangers, through: :messages
 
   def avatar_thumbnail
     avatar.variant(resize: '120x120!').processed
@@ -87,7 +90,12 @@ class User < ActiveRecord::Base
       temp = rev.valutazione.to_i
       ris += temp
     end
-    (ris / num if num.positive?)
+    tot = nil
+    if num > 0
+      tot = (ris/num.to_f).ceil(1)
+    end
+    return tot
+    
   end
 
   attr_accessor :current_password

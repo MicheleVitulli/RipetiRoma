@@ -9,7 +9,6 @@ class SubjectsController < ApplicationController
   def aggiungi_materia
     @corso = Course.find(params[:id])
     @materia = Subject.find(params[:materia_id])
-    # binding.pry
     @corso.subject = @materia
     redirect_to '/courses' if @corso.save
   end
@@ -35,14 +34,15 @@ class SubjectsController < ApplicationController
   # POST /subjects or /subjects.json
   def create
     @subject = Subject.new(subject_params)
-
     respond_to do |format|
       if @subject.save
-        format.html { redirect_to @subject, notice: 'Subject was successfully created.' }
-        format.json { render :show, status: :created, location: @subject }
+        flash[:success] = "Nuova materia creata correttamente"
+        format.html { redirect_to subjects_url}
+        format.json { render :index, status: :created, location: @subject }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @subject.errors, status: :unprocessable_entity }
+        
+        format.html { render :new }
+        
       end
     end
   end
@@ -51,7 +51,7 @@ class SubjectsController < ApplicationController
   def update
     respond_to do |format|
       if @subject.update(subject_params)
-        format.html { redirect_to @subject, notice: 'Subject was successfully updated.' }
+        format.html { redirect_to subjects_url, notice: 'Subject was successfully updated.' }
         format.json { render :show, status: :ok, location: @subject }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -71,7 +71,8 @@ class SubjectsController < ApplicationController
     end
     @subject.destroy
     respond_to do |format|
-      format.html { redirect_to subjects_url, notice: 'Subject was successfully destroyed.' }
+      flash[:warning] = "Materia eliminata correttamente"
+      format.html { redirect_to subjects_url }
       format.json { head :no_content }
     end
   end
